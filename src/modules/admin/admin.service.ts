@@ -1,14 +1,22 @@
 import { prisma } from "../../db/client.js";
-import type { Status } from "@prisma/client";
+import { type Status, type Role } from "@prisma/client"; // Added Role here
 
-export type ListUsersInput = { role?: "CREATOR" | "BRAND" | "ORGANISER" | "ADMIN"; status?: Status; page: number; limit: number };
+export type ListUsersInput = { 
+  role?: "CREATOR" | "BRAND" | "ORGANISER" | "ADMIN"; 
+  status?: Status; 
+  page: number; 
+  limit: number 
+};
 export type UpdateUserStatusInput = { status: "VERIFIED" | "SUSPENDED" };
 export type ResolveDisputeInput = { action: "release" | "refund" };
 
 export async function listUsers(input: ListUsersInput) {
-  const where: { role?: string; status?: Status } = {};
-  if (input.role) where.role = input.role;
+  // FIX: Type the 'where' object correctly so Prisma accepts it
+  const where: { role?: Role; status?: Status } = {};
+  
+  if (input.role) where.role = input.role as Role;
   if (input.status) where.status = input.status;
+
   const [items, total] = await Promise.all([
     prisma.user.findMany({
       where,
@@ -32,7 +40,7 @@ export async function listUsers(input: ListUsersInput) {
 export async function updateUserStatus(userId: string, input: UpdateUserStatusInput) {
   return prisma.user.update({
     where: { id: userId },
-    data: { status: input.status },
+    data: { status: input.status as Status }, // Cast to Status enum
   });
 }
 
@@ -73,8 +81,9 @@ export async function exportWaitlistCsv(): Promise<string> {
     orderBy: { createdAt: "asc" },
   });
   const header = "email,role,name,createdAt\n";
+  // FIX: Added (r: any) to satisfy TS7006
   const lines = rows.map(
-    (r) => `${r.email},${r.role},${r.name ?? ""},${r.createdAt.toISOString()}`
+    (r: any) => `${r.email},${r.role},${r.name ?? ""},${r.createdAt.toISOString()}`
   );
   return header + lines.join("\n");
 }
