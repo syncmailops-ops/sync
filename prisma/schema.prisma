@@ -11,9 +11,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Enable pgvector in migration: CREATE EXTENSION IF NOT EXISTS vector;
-// Run manually or in a migration.
-
 enum Role {
   CREATOR
   BRAND
@@ -78,30 +75,29 @@ model User {
   creatorProfile   CreatorProfile?
   brandProfile     BrandProfile?
   organiserProfile OrganiserProfile?
-  campaignsAsBrand Campaign[]           @relation("CampaignBrand")
+  campaignsAsBrand Campaign[]        @relation("CampaignBrand")
   applications     Application[]
-  contractsSigned  Contract[]           @relation("ContractCreator")
+  contractsSigned  Contract[]        @relation("ContractCreator")
   deliverables     Deliverable[]
-  referralsGiven   Referral[]           @relation("Referrer")
-  referralReceived Referral?            @relation("Referred")
+  referralsGiven   Referral[]        @relation("Referrer")
+  referralReceived Referral?         @relation("Referred")
   notifications    Notification[]
-  reviewsGiven     Review[]             @relation("Reviewer")
-  reviewsReceived Review[]              @relation("Reviewee")
+  reviewsGiven     Review[]          @relation("Reviewer")
+  reviewsReceived  Review[]          @relation("Reviewee")
 }
 
 model CreatorProfile {
-  userId         String   @id
+  userId         String    @id
   displayName    String
   bio            String?
   niche          String
   state          String
   socialHandle   String
-  followerRange  String   // 1k-10k | 10k-50k | 50k-200k | 200k-1m | 1m+
+  followerRange  String
   engagementRate Float?
   kycStatus      KYCStatus @default(NONE)
-  bankDetails    String?   // AES-256 encrypted
+  bankDetails    String?
   avatarUrl      String?
-  embedding      Unsupported("vector(1536)")?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -143,12 +139,11 @@ model Campaign {
   deliverables String
   deadline     DateTime
   status       CampaignStatus @default(DRAFT)
-  embedding    Unsupported("vector(1536)")?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 
-  brand         User          @relation("CampaignBrand", fields: [brandId], references: [id], onDelete: Cascade)
-  applications  Application[]
+  brand        User          @relation("CampaignBrand", fields: [brandId], references: [id], onDelete: Cascade)
+  applications Application[]
 }
 
 model Application {
@@ -160,9 +155,9 @@ model Application {
   message      String?
   appliedAt    DateTime  @default(now())
 
-  campaign  Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-  creator   User      @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  contract  Contract?
+  campaign Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  creator  User      @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  contract Contract?
 
   @@unique([campaignId, creatorId])
 }
@@ -176,27 +171,27 @@ model Contract {
   signedByCreator Boolean   @default(false)
   signedAt        DateTime?
   pdfUrl          String?
+  creatorId       String
+  brandId         String
 
-  application   Application   @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  creator       User          @relation("ContractCreator", fields: [creatorId], references: [id], onDelete: Cascade)
-  creatorId     String
-  brandId       String
-  escrow        Escrow?
-  deliverables  Deliverable[]
-  reviews       Review[]
+  application  Application   @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  creator      User          @relation("ContractCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  escrow       Escrow?
+  deliverables Deliverable[]
+  reviews      Review[]
 }
 
 model Escrow {
-  id                  String       @id @default(cuid())
-  contractId          String       @unique
-  amount              Decimal
-  razorpayOrderId     String?
-  razorpayPaymentId   String?
-  status              EscrowStatus @default(PENDING)
-  heldAt              DateTime?
-  releasedAt          DateTime?
-  createdAt           DateTime     @default(now())
-  updatedAt           DateTime     @updatedAt
+  id                String       @id @default(cuid())
+  contractId        String       @unique
+  amount            Decimal
+  razorpayOrderId   String?
+  razorpayPaymentId String?
+  status            EscrowStatus @default(PENDING)
+  heldAt            DateTime?
+  releasedAt        DateTime?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
 
   contract Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
 }
@@ -206,12 +201,12 @@ model Deliverable {
   contractId  String
   creatorId   String
   fileUrl     String
-  submittedAt DateTime         @default(now())
+  submittedAt DateTime          @default(now())
   status      DeliverableStatus @default(PENDING)
   feedback    String?
 
   contract Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
-  creator   User    @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  creator  User     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 }
 
 model Referral {
@@ -224,7 +219,7 @@ model Referral {
   convertedAt  DateTime?
 
   referrer User?  @relation("Referrer", fields: [referrerId], references: [id], onDelete: Cascade)
-  referred User? @relation("Referred", fields: [referredId], references: [id], onDelete: SetNull)
+  referred User?  @relation("Referred", fields: [referredId], references: [id], onDelete: SetNull)
 }
 
 model Notification {
@@ -244,12 +239,12 @@ model Review {
   reviewerId String
   revieweeId String
   contractId String   @unique
-  rating     Int      // 1-5
+  rating     Int
   comment    String?
   createdAt  DateTime @default(now())
 
-  reviewer User    @relation("Reviewer", fields: [reviewerId], references: [id], onDelete: Cascade)
-  reviewee User    @relation("Reviewee", fields: [revieweeId], references: [id], onDelete: Cascade)
+  reviewer User     @relation("Reviewer", fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewee User     @relation("Reviewee", fields: [revieweeId], references: [id], onDelete: Cascade)
   contract Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
 }
 
@@ -260,4 +255,3 @@ model Waitlist {
   name      String?
   createdAt DateTime @default(now())
 }
-
