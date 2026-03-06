@@ -1919,7 +1919,7 @@ async function submitForm(role) {
 
   // Map fields to waitlist schema: { email, role, name }
   const payload = {
-    email: data['b-email'] || data['e-email'] || null,
+    email: data['c-email'] || data['b-email'] || data['e-email'] || null,,
     role:  role,
     name:  data['c-name'] || data['b-founder'] || data['e-contact'] || null,
   };
