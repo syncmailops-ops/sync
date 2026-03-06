@@ -3,7 +3,7 @@ import cors from "@fastify/cors";
 import cookie from "@fastify/cookie";
 import { getEnv } from "./config/env.js";
 import { errorHandler } from "./middleware/errorHandler.js";
-import { rateLimiter } from "./middleware/rateLimiter.js";
+//import { rateLimiter } from "./middleware/rateLimiter.js";
 import { authRoutes } from "./modules/auth/auth.routes.js";
 import { userRoutes } from "./modules/users/users.routes.js";
 import { campaignRoutes } from "./modules/campaigns/campaigns.routes.js";
@@ -38,7 +38,7 @@ export async function buildApp() {
   });  await app.register(cookie, { secret: env.JWT_REFRESH_SECRET });
 
   app.setErrorHandler(errorHandler);
-  await app.register(rateLimiter, { redisUrl: env.REDIS_URL });
+  //await app.register(rateLimiter, { redisUrl: env.REDIS_URL });
 
   app.get("/health", async (_request, reply) => {
     return reply.send({ ok: true, service: "sync-api" });
@@ -62,4 +62,5 @@ export async function buildApp() {
 
   return app;
 }
+
 
