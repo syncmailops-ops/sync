@@ -1,3 +1,4 @@
+process.stdout.write('BOOT START\n');
 import { buildApp } from "./app.js";
 import { getEnv } from "./config/env.js";
 
@@ -39,3 +40,4 @@ async function main() {
 }
 
 main();
+
