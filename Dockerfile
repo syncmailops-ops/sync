@@ -13,7 +13,7 @@ RUN npm install
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN echo "bust"
+RUN echo "bust3"
 # CRITICAL FIX: Generate Prisma types BEFORE running tsc (npm run build)
 RUN npx prisma generate
 
@@ -35,5 +35,6 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 USER node
 CMD ["node", "dist/server.js"]
+
 
 
