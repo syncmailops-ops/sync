@@ -1,11 +1,5 @@
 import Redis from "ioredis";
-import { getEnv } from "./config/env.js";
 
-let redis: Redis | null = null;
+const redis = new Redis(process.env.REDIS_URL || "");
 
-export function getRedis(): Redis {
-  if (!redis) {
-    redis = new Redis(getEnv().REDIS_URL);
-  }
-  return redis;
-}
+export default redis;
