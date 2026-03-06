@@ -29,7 +29,7 @@ export async function errorHandler(
     return;
   }
 
-  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+  if ((err as any).code) {
     const statusCode = prismaCodeToStatus[error.code] ?? 400;
     let message: string;
     if (error.code === "P2002") {
@@ -62,3 +62,4 @@ export async function errorHandler(
     statusCode,
   });
 }
+
