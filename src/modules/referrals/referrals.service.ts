@@ -42,7 +42,7 @@ export async function processReferralConversion(referredUserId: string): Promise
     where: { referredId: referredUserId, status: "PENDING" },
   });
   if (!referral) return;
-  await prisma.$transaction(async (tx) => {
+  await prisma.$transaction(async (tx: any) => {
     await tx.referral.update({
       where: { id: referral.id },
       data: { status: "CONVERTED", convertedAt: new Date() },
@@ -117,3 +117,4 @@ export const referralService = {
   getMyCode,
   getStats,
 };
+
