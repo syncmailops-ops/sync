@@ -1,6 +1,6 @@
 # 1. Define the 'base' stage
 FROM node:20-alpine AS base
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
 
 # 2. Dependencies stage
@@ -35,3 +35,4 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 USER node
 CMD ["node", "dist/server.js"]
+
