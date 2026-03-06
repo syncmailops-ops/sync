@@ -1917,11 +1917,18 @@ async function submitForm(role) {
     if (el.id) data[el.id] = el.value.trim();
   });
 
-  const payload = {
-    email: data['c-email'] || data['b-email'] || data['e-email'] || null,
-    role: role,
-    name: data['c-name'] || data['b-founder'] || data['e-contact'] || null
-  };
+  const email = data['c-email'] || data['b-email'] || data['e-email'];
+
+if (!email) {
+  alert("Please enter a valid email");
+  return;
+}
+
+const payload = {
+  email: email.toLowerCase().trim(),
+  role: role.toUpperCase(),
+  name: data['c-name'] || data['b-founder'] || data['e-contact'] || null
+};
 
   const btn = panel.querySelector('.reg-submit');
   btn.disabled = true;
