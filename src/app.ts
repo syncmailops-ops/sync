@@ -17,7 +17,11 @@ export async function buildApp() {
     origin: [
       "https://sync-murex-alpha.vercel.app",
       "http://localhost:5173",
+      "https://synkspace.in",
+      "https://www.synkspace.in"
+
     ],
+    methods: ["GET","POST","PUT","DELETE","OPTIONS"],
     credentials: true,
   });
 
@@ -32,3 +36,4 @@ export async function buildApp() {
 
   return app;
 }
+
