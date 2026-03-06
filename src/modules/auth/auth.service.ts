@@ -4,7 +4,7 @@ import crypto from "node:crypto";
 import { prisma } from "../../db/client.js";
 import { getEnv } from "../../config/env.js";
 import { getRedis } from "../../redis.js";
-import type { Role } from "@prisma/client";
+import { Prisma, type Role } from "@prisma/client"; // Added Prisma here
 import type {
   RegisterInput,
   LoginInput,
@@ -27,7 +27,8 @@ export async function register(
   const hash = await bcrypt.hash(input.password, BCRYPT_ROUNDS);
   const referralCode = await referralService.generateCode();
 
-  const user = await prisma.$transaction(async (tx) => {
+  // FIX: Added Prisma.TransactionClient type to 'tx'
+  const user = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
     const role = input.role as Role;
     const u = await tx.user.create({
       data: {
@@ -103,7 +104,7 @@ export async function register(
         html: `Welcome to Sync! <a href="${verifyUrl}">Click here to verify your email</a>.`,
       });
     } catch (_) {
-      // Don't fail registration if email fails; user is already created
+      // Don't fail registration if email fails
     }
   }
 
@@ -210,21 +211,6 @@ export async function forgotPassword(input: ForgotPasswordInput): Promise<{ mess
     });
   }
   return { message: "If the email exists, a reset link has been sent." };
-}
-
-export async function resetPassword(input: ResetPasswordInput): Promise<{ message: string }> {
-  const redis = getRedis();
-  const userId = await redis.get("reset:" + input.token);
-  if (!userId) {
-    throw new Error("Invalid or expired reset token");
-  }
-  const hash = await bcrypt.hash(input.password, BCRYPT_ROUNDS);
-  await prisma.user.update({
-    where: { id: userId },
-    data: { passwordHash: hash },
-  });
-  await redis.del("reset:" + input.token);
-  return { message: "Password reset successful" };
 }
 
 export async function resetPassword(input: ResetPasswordInput): Promise<{ message: string }> {
