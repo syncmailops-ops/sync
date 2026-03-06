@@ -1897,13 +1897,14 @@ function activatePanel(role) {
   document.getElementById('reg-sub').textContent   = REG_META[role].sub;
 }
 
-function submitForm(role) {
+async function submitForm(role) {
   // Basic required-field check
   const panel = document.getElementById('panel-' + role);
   const inputs = panel.querySelectorAll('.reg-input, .reg-select');
   let valid = true;
   inputs.forEach(el => {
     el.style.borderColor = '';
+    el.style.boxShadow = '';
     if (!el.value.trim()) {
       el.style.borderColor = '#EF4444';
       el.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.10)';
@@ -1912,25 +1913,47 @@ function submitForm(role) {
   });
   if (!valid) return;
 
-  // Collect data (ready for backend integration)
+  // Collect data
   const data = { role };
   inputs.forEach(el => { if (el.id) data[el.id] = el.value.trim(); });
-  console.log('[Sync] Registration data:', data);
-  // TODO: POST data to /api/auth/register or waitlist endpoint
 
-  // Show success
-  panel.classList.remove('active');
-  document.getElementById('reg-success').classList.add('show');
+  // Map fields to waitlist schema: { email, role, name }
+  const payload = {
+    email: data['b-email'] || data['e-email'] || null,
+    role:  role,
+    name:  data['c-name'] || data['b-founder'] || data['e-contact'] || null,
+  };
+
+  // Disable submit button to prevent double-submit
+  const btn = panel.querySelector('.reg-submit');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+
+  try {
+    const res = await fetch('https://sync-production-7285.up.railway.app/waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Server error');
+    }
+
+    // Show success
+    panel.classList.remove('active');
+    document.getElementById('reg-success').classList.add('show');
+
+  } catch (err) {
+    console.error('[Sync] Waitlist error:', err);
+    btn.disabled = false;
+    btn.textContent = role === 'creator' ? 'Join as Creator'
+                    : role === 'brand'   ? 'Join as Brand'
+                    :                      'Join as Organiser';
+    alert('Something went wrong: ' + err.message + '\nPlease try again.');
+  }
 }
-
-// Close on overlay click
-document.getElementById('reg-overlay').addEventListener('click', function(e) {
-  if (e.target === this) closeReg();
-});
-// Close on Escape
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeReg();
-});
 
 </script>
 
