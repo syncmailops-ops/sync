@@ -1,0 +1,7 @@
+# Copy this to your FRONTEND project as .env.production or set in Vercel → Settings → Environment Variables
+# Use VITE_ prefix for Vite; NEXT_PUBLIC_ for Next.js
+
+# Backend API URL (no trailing slash) - replace with your deployed API URL
+VITE_API_URL=https://your-api.railway.app
+# Or for Next.js:
+# NEXT_PUBLIC_API_URL=https://your-api.railway.app

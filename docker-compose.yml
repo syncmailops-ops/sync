@@ -1,0 +1,37 @@
+# Sync backend - local development
+# postgres with pgvector, redis
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: sync-postgres
+    environment:
+      POSTGRES_USER: sync
+      POSTGRES_PASSWORD: sync_secret
+      POSTGRES_DB: sync_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - sync_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sync -d sync_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: sync-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - sync_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  sync_pg_data:
+  sync_redis_data:
