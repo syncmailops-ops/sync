@@ -1917,13 +1917,26 @@ async function submitForm(role) {
 
   if (!valid) return;
 
-  const data = { role: role };
+  let email = null;
+  let name = null;
 
-  inputs.forEach(function(el) {
-    if (el.id) data[el.id] = el.value.trim();
-  });
+  // CREATOR
+  if (role === 'creator') {
+    email = document.getElementById('c-email')?.value;
+    name = document.getElementById('c-name')?.value;
+  }
 
-  const email = data['c-email'] || data['b-email'] || data['e-email'];
+  // BRAND
+  if (role === 'brand') {
+    email = document.getElementById('b-email')?.value;
+    name = document.getElementById('b-founder')?.value;
+  }
+
+  // ORGANISER
+  if (role === 'event') {
+    email = document.getElementById('e-email')?.value;
+    name = document.getElementById('e-contact')?.value;
+  }
 
   if (!email) {
     alert("Please enter a valid email");
@@ -1932,12 +1945,11 @@ async function submitForm(role) {
 
   const payload = {
     email: email.toLowerCase().trim(),
-    role: role.toUpperCase(),
-    name: data['c-name'] || data['b-founder'] || data['e-contact'] || null
+    role: role === 'event' ? 'ORGANISER' : role.toUpperCase(),
+    name: name || null
   };
 
   const btn = panel.querySelector('.reg-submit');
-
   btn.disabled = true;
   btn.textContent = 'Submitting...';
 
@@ -1952,7 +1964,7 @@ async function submitForm(role) {
     });
 
     if (!res.ok) {
-      const err = await res.json().catch(function() { return {}; });
+      const err = await res.json().catch(() => ({}));
       throw new Error(err.message || 'Server error');
     }
 
@@ -1964,6 +1976,7 @@ async function submitForm(role) {
     console.error('[Sync] Waitlist error:', err);
 
     btn.disabled = false;
+
     btn.textContent =
       role === 'creator'
         ? 'Join as Creator'
@@ -1971,11 +1984,11 @@ async function submitForm(role) {
         ? 'Join as Brand'
         : 'Join as Organiser';
 
-    alert('Something went wrong: ' + err.message + '. Please try again.');
+    alert('Something went wrong: ' + err.message);
+
   }
 
-}
-</script>
+}</script>
 
 
 <!-- ═══════════════════════════════════════════════
