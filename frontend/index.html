@@ -1900,95 +1900,92 @@ function activatePanel(role) {
 async function submitForm(role) {
 
   const panel = document.getElementById('panel-' + role);
-  const inputs = panel.querySelectorAll('.reg-input, .reg-select');
+  const btn = panel.querySelector('.reg-submit');
 
-  let valid = true;
+  let email = "";
+  let name = "";
 
-  inputs.forEach(function(el) {
-    el.style.borderColor = '';
-    el.style.boxShadow = '';
-
-    if (!el.value.trim()) {
-      el.style.borderColor = '#EF4444';
-      el.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.10)';
-      valid = false;
-    }
-  });
-
-  if (!valid) return;
-
-  let email = null;
-  let name = null;
-
-  // CREATOR
-  if (role === 'creator') {
-    email = document.getElementById('c-email')?.value;
-    name = document.getElementById('c-name')?.value;
+  // Get fields based on role
+  if (role === "creator") {
+    email = document.getElementById("c-email")?.value || "";
+    name = document.getElementById("c-name")?.value || "";
   }
 
-  // BRAND
-  if (role === 'brand') {
-    email = document.getElementById('b-email')?.value;
-    name = document.getElementById('b-founder')?.value;
+  if (role === "brand") {
+    email = document.getElementById("b-email")?.value || "";
+    name = document.getElementById("b-founder")?.value || "";
   }
 
-  // ORGANISER
-  if (role === 'event') {
-    email = document.getElementById('e-email')?.value;
-    name = document.getElementById('e-contact')?.value;
+  if (role === "event") {
+    email = document.getElementById("e-email")?.value || "";
+    name = document.getElementById("e-contact")?.value || "";
   }
 
-  if (!email) {
-    alert("Please enter a valid email");
+  email = email.trim().toLowerCase();
+  name = name.trim();
+
+  // Email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(email)) {
+    alert("Please enter a valid email address");
     return;
   }
 
+  // Convert role to backend enum
+  let backendRole = "";
+
+  if (role === "creator") backendRole = "CREATOR";
+  if (role === "brand") backendRole = "BRAND";
+  if (role === "event") backendRole = "ORGANISER";
+
   const payload = {
-    email: email.toLowerCase().trim(),
-    role: role === 'event' ? 'ORGANISER' : role.toUpperCase(),
+    email: email,
+    role: backendRole,
     name: name || null
   };
 
-  const btn = panel.querySelector('.reg-submit');
   btn.disabled = true;
-  btn.textContent = 'Submitting...';
+  btn.textContent = "Submitting...";
 
   try {
 
-    const res = await fetch('https://sync-production-7285.up.railway.app/api/waitlist', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    });
+    const res = await fetch(
+      "https://sync-production-7285.up.railway.app/api/waitlist",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    const result = await res.json().catch(() => ({}));
 
     if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.message || 'Server error');
+      throw new Error(result.message || "Server error");
     }
 
-    panel.classList.remove('active');
-    document.getElementById('reg-success').classList.add('show');
+    // Success UI
+    panel.classList.remove("active");
+    document.getElementById("reg-success").classList.add("show");
 
-  } catch(err) {
+  } catch (err) {
 
-    console.error('[Sync] Waitlist error:', err);
+    console.error("[Sync] Waitlist error:", err);
+
+    alert("Submission failed: " + err.message);
 
     btn.disabled = false;
 
-    btn.textContent =
-      role === 'creator'
-        ? 'Join as Creator'
-        : role === 'brand'
-        ? 'Join as Brand'
-        : 'Join as Organiser';
-
-    alert('Something went wrong: ' + err.message);
-
+    if (role === "creator") btn.textContent = "Join as Creator";
+    if (role === "brand") btn.textContent = "Join as Brand";
+    if (role === "event") btn.textContent = "Join as Organiser";
   }
+}
 
-}</script>
+</script>
 
 
 <!-- ═══════════════════════════════════════════════
