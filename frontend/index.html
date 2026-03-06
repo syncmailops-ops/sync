@@ -1928,7 +1928,7 @@ async function submitForm(role) {
   btn.textContent = 'Submitting...';
 
   try {
-    const res = await fetch('https://sync-production-7285.up.railway.app/waitlist', {
+    const res = await fetch(''https://sync-production-7285.up.railway.app/api/waitlist'', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
