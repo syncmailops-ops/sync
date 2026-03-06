@@ -30,17 +30,12 @@ export async function buildApp() {
   });
 
   await app.register(cors, {
-    origin: (origin, cb) => {
-      const allowed = env.FRONTEND_URL;
-      if (!origin || origin === allowed || env.NODE_ENV === "development") {
-        cb(null, true);
-        return;
-      }
-      cb(null, false);
-    },
+    origin: [
+      "https://sync-murex-alpha.vercel.app",
+      "http://localhost:5173",
+    ],
     credentials: true,
-  });
-  await app.register(cookie, { secret: env.JWT_REFRESH_SECRET });
+  });  await app.register(cookie, { secret: env.JWT_REFRESH_SECRET });
 
   app.setErrorHandler(errorHandler);
   await app.register(rateLimiter, { redisUrl: env.REDIS_URL });
@@ -67,3 +62,4 @@ export async function buildApp() {
 
   return app;
 }
+
