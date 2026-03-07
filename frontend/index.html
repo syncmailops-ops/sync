@@ -1238,8 +1238,230 @@ body {
   .sp-section          { padding: 40px 12px; }
   .refer-section       { padding: 40px 12px; }
   .footer-section      { padding: 40px 12px; }
+  .faq-section         { padding: 40px 12px; }
   .reg-role-tab span   { display: none; }
   .rt-dot              { width: 10px; height: 10px; }
+}
+
+/* ─── FAQ SECTION ─── */
+.faq-section {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 96px 40px;
+  background: linear-gradient(160deg, #020617 0%, #0F172A 50%, #1a0533 100%);
+  position: relative;
+  overflow: hidden;
+}
+.faq-section::before {
+  content: '';
+  position: absolute;
+  width: 680px; height: 680px;
+  left: 50%; top: -200px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 65%);
+  pointer-events: none;
+}
+.faq-section::after {
+  content: '';
+  position: absolute;
+  width: 400px; height: 400px;
+  right: -100px; bottom: -100px;
+  background: radial-gradient(circle, rgba(236,72,153,0.10) 0%, transparent 65%);
+  pointer-events: none;
+}
+.faq-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 56px;
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.faq-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+.faq-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  background: rgba(99,102,241,0.15);
+  border: 1px solid rgba(99,102,241,0.35);
+  border-radius: 9999px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700; font-size: 11px;
+  letter-spacing: 1.4px; text-transform: uppercase;
+  color: #A5B4FC;
+}
+.faq-h2 {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 800; font-size: 44px;
+  line-height: 50px; letter-spacing: -1.2px;
+  color: #FFFFFF;
+}
+.faq-h2 span {
+  background: linear-gradient(90deg, #60A5FA 0%, #C084FC 55%, #F472B6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.faq-sub {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 400; font-size: 17px;
+  line-height: 27px; color: #94A3B8;
+  max-width: 480px;
+}
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+}
+.faq-card {
+  background: rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  cursor: pointer;
+  transition: background 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.faq-card:last-child { border-bottom: none; }
+.faq-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #6366F1, #EC4899);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.faq-card:hover { background: rgba(255,255,255,0.06); }
+.faq-card.open  { background: rgba(99,102,241,0.08); }
+.faq-card.open::before { opacity: 1; }
+.faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px 28px;
+}
+.faq-q-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1; min-width: 0;
+}
+.faq-num {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 800; font-size: 13px;
+  color: rgba(99,102,241,0.6);
+  letter-spacing: 0.5px;
+  min-width: 24px;
+  flex-shrink: 0;
+}
+.faq-card.open .faq-num {
+  background: linear-gradient(90deg, #818CF8, #C084FC);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.faq-q-text {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700; font-size: 16px;
+  line-height: 24px; color: #E2E8F0;
+  transition: color 0.2s;
+}
+.faq-card.open .faq-q-text { color: #FFFFFF; }
+.faq-toggle {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+.faq-toggle svg {
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.faq-card.open .faq-toggle {
+  background: linear-gradient(135deg, #6366F1, #8B5CF6);
+  border-color: transparent;
+}
+.faq-card.open .faq-toggle svg { transform: rotate(180deg); }
+.faq-card.open .faq-toggle svg path { stroke: #FFFFFF; }
+.faq-a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
+  opacity: 0;
+}
+.faq-card.open .faq-a { max-height: 300px; opacity: 1; }
+.faq-a-inner {
+  padding: 0 28px 24px 64px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 400; font-size: 15px;
+  line-height: 25px; color: #94A3B8;
+}
+.faq-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.faq-bottom-text {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500; font-size: 15px;
+  color: #64748B;
+}
+.faq-contact-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 24px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 9999px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700; font-size: 14px;
+  color: #E2E8F0; text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+.faq-contact-btn:hover {
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(99,102,241,0.5);
+  transform: translateY(-1px);
+  color: #FFFFFF;
+}
+@media (max-width: 1024px) {
+  .faq-section { padding: 80px 32px; }
+  .faq-h2      { font-size: 38px; line-height: 44px; }
+}
+@media (max-width: 768px) {
+  .faq-section { padding: 64px 20px; }
+  .faq-h2      { font-size: 30px; line-height: 38px; }
+  .faq-sub     { font-size: 15px; }
+  .faq-q       { padding: 20px; }
+  .faq-a-inner { padding: 0 20px 20px 52px; font-size: 14px; }
+}
+@media (max-width: 480px) {
+  .faq-section { padding: 48px 16px; }
+  .faq-h2      { font-size: 26px; line-height: 32px; }
+  .faq-q       { padding: 18px 16px; gap: 12px; }
+  .faq-q-text  { font-size: 14px; line-height: 21px; }
+  .faq-a-inner { padding: 0 16px 18px 40px; }
+  .faq-num     { display: none; }
 }
 </style>
 </head>
@@ -1594,6 +1816,94 @@ body {
     </div>
   </div>
 
+  <!-- ─── FAQ ─── -->
+  <div class="faq-section">
+    <div class="faq-inner">
+
+      <div class="faq-header">
+        <div class="faq-badge">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#A5B4FC" stroke-width="1.5"/><path d="M5 3v2.2L6.2 6.5" stroke="#A5B4FC" stroke-width="1.3" stroke-linecap="round"/></svg>
+          FAQ
+        </div>
+        <h2 class="faq-h2">Got <span>Questions?</span><br>We've Got Answers.</h2>
+        <p class="faq-sub">Everything you need to know about SynkSpace before you join the waitlist.</p>
+      </div>
+
+      <div class="faq-list">
+
+        <div class="faq-card" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <div class="faq-q-left">
+              <span class="faq-num">01</span>
+              <span class="faq-q-text">Who can join SynkSpace?</span>
+            </div>
+            <button class="faq-toggle" aria-label="Toggle answer">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 5l5 5 5-5" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <div class="faq-a">
+            <div class="faq-a-inner">SynkSpace is open to content creators (nano to mega influencers), brands of all sizes, and event organisers across India. Whether you have 1,000 followers or 10 million — if you create authentic content, there's a place for you here.</div>
+          </div>
+        </div>
+
+        <div class="faq-card" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <div class="faq-q-left">
+              <span class="faq-num">02</span>
+              <span class="faq-q-text">How does the escrow payment system work?</span>
+            </div>
+            <button class="faq-toggle" aria-label="Toggle answer">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 5l5 5 5-5" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <div class="faq-a">
+            <div class="faq-a-inner">When a brand hires a creator, funds are locked in our secure escrow vault. The money is only released once deliverables are approved — brands don't pay for work not done, and creators are guaranteed payment for completed work.</div>
+          </div>
+        </div>
+
+        <div class="faq-card" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <div class="faq-q-left">
+              <span class="faq-num">03</span>
+              <span class="faq-q-text">Is SynkSpace free to join?</span>
+            </div>
+            <button class="faq-toggle" aria-label="Toggle answer">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 5l5 5 5-5" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <div class="faq-a">
+            <div class="faq-a-inner">Joining the waitlist and creating a profile is completely free. We operate on a small success-based commission only when a collaboration is successfully completed. No monthly fees, no hidden charges — we only earn when you do.</div>
+          </div>
+        </div>
+
+        <div class="faq-card" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <div class="faq-q-left">
+              <span class="faq-num">04</span>
+              <span class="faq-q-text">When will SynkSpace launch publicly?</span>
+            </div>
+            <button class="faq-toggle" aria-label="Toggle answer">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 5l5 5 5-5" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <div class="faq-a">
+            <div class="faq-a-inner">We're currently in private beta, onboarding our first cohort of creators, brands, and event organisers. Waitlist members get exclusive early access before the public launch — join now to secure your spot and shape the platform from day one.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="faq-bottom">
+        <span class="faq-bottom-text">Still have questions?</span>
+        <a href="mailto:info@synkspace.in" class="faq-contact-btn">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1" y="3" width="13" height="9" rx="1.5" stroke="#E2E8F0" stroke-width="1.4"/><path d="M1 4.5l6.5 4.5L14 4.5" stroke="#E2E8F0" stroke-width="1.4" stroke-linecap="round"/></svg>
+          Contact Us
+        </a>
+      </div>
+
+    </div>
+  </div>
+
   <!-- ─── FOOTER / WAITLIST ─── -->
   <div class="footer-section">
     <div class="footer-inner">
@@ -1621,6 +1931,11 @@ body {
 </div><!-- end page-wrapper -->
 
 <script>
+function toggleFaq(card) {
+  const isOpen = card.classList.contains('open');
+  document.querySelectorAll('.faq-card.open').forEach(c => c.classList.remove('open'));
+  if (!isOpen) card.classList.add('open');
+}
 function switchTab(el) {
   document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
