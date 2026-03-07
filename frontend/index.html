@@ -1252,7 +1252,7 @@ body {
 <img src="assets/synkspace-logo.png" width="90" height="90" style="object-fit:contain;" alt="SynkSpace Logo">
       <span class="nav-logo-text">SynkSpace</span>
     </div>
-    <a href="#" class="nav-cta-btn" onclick="event.preventDefault();openReg('creator')">Get Early Access</a>
+    <a href="#" class="nav-cta-btn" id="navCta" style="opacity:0;pointer-events:none;transition:opacity 0.3s ease;" onclick="event.preventDefault();openReg('creator')">Get Early Access</a>
   </div>
 </nav>
 
@@ -1286,41 +1286,15 @@ body {
           </div>
 
           <div class="hero-cta-area">
-            <div class="hero-buttons-row">
-              <!-- Join as Creator -->
-              <a href="#" class="btn-creator" onclick="event.preventDefault();openReg('creator')">
+            <div class="hero-buttons-row" id="heroCtaRow">
+              <a href="#" class="btn-creator" id="heroCta" onclick="event.preventDefault();openReg('creator')">
                 <div class="b-icon">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                     <circle cx="10" cy="7" r="4.5" stroke="#E2E8F0" stroke-width="1.6"/>
                     <path d="M2 18c0-4.418 3.582-8 8-8s8 3.582 8 8" stroke="#E2E8F0" stroke-width="1.6" stroke-linecap="round"/>
                   </svg>
                 </div>
-                <div class="b-text">Join as Creator</div>
-              </a>
-
-              <!-- Join as Brand -->
-              <a href="#" class="btn-brand" onclick="event.preventDefault();openReg('brand')">
-                <div class="b-icon">
-                  <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="1" y="7" width="18" height="10" rx="2" stroke="#3B82F6" stroke-width="1.5"/>
-                    <path d="M6 7V5a4 4 0 018 0v2" stroke="#3B82F6" stroke-width="1.5"/>
-                    <circle cx="10" cy="12" r="1.5" fill="#3B82F6"/>
-                  </svg>
-                </div>
-                <div class="b-text">Join as Brand</div>
-              </a>
-
-              <!-- Join as Event -->
-              <a href="#" class="btn-event" onclick="event.preventDefault();openReg('event')">
-                <div class="b-icon">
-                  <svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="1" y="1" width="18" height="14" rx="2" stroke="#8B5CF6" stroke-width="1.5"/>
-                    <line x1="1" y1="6" x2="19" y2="6" stroke="#8B5CF6" stroke-width="1.5"/>
-                    <circle cx="6" cy="3.5" r="1.2" fill="#8B5CF6"/>
-                    <circle cx="14" cy="3.5" r="1.2" fill="#8B5CF6"/>
-                  </svg>
-                </div>
-                <div class="b-text">Join as Event</div>
+                <div class="b-text">Get Early Access</div>
               </a>
             </div>
 
@@ -1794,6 +1768,24 @@ async function submitForm(role) {
     if (role === "event") btn.textContent = "Join as Organiser";
   }
 }
+
+(function() {
+  var navCta = document.getElementById('navCta');
+  var heroCta = document.getElementById('heroCtaRow');
+
+  function onScroll() {
+    var heroBottom = heroCta.getBoundingClientRect().bottom;
+    if (heroBottom < 0) {
+      navCta.style.opacity = '1';
+      navCta.style.pointerEvents = 'auto';
+    } else {
+      navCta.style.opacity = '0';
+      navCta.style.pointerEvents = 'none';
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
 
 </script>
 
