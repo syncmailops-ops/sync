@@ -831,61 +831,6 @@ body {
   line-height: 23px; color: #64748B;
 }
 
-/* ─── REFER & EARN ─── */
-.refer-section {
-  display: flex; flex-direction: column; align-items: center;
-  padding: 80px 40px; gap: 20px;
-  width: 100%; box-sizing: border-box;
-}
-.refer-h2-wrap { display: flex; justify-content: center; width: 100%; }
-.refer-h2 {
-  font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 36px;
-  line-height: 40px; color: #0F172A; text-align: center;
-}
-.refer-sub-wrap { display: flex; justify-content: center; width: 100%; }
-.refer-sub {
-  font-family: 'Manrope', sans-serif; font-weight: 400; font-size: 18px;
-  line-height: 28px; color: #64748B; text-align: center;
-  width: 100%; max-width: 520px; text-align: center;
-}
-.refer-amt-wrap {
-  display: flex; justify-content: center; align-items: center;
-  padding: 8px 0;
-  width: 100%;
-}
-.refer-amt {
-  font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 30px;
-  line-height: 36px; color: #059669; text-align: center;
-}
-
-.refer-input-box {
-  box-sizing: border-box;
-  display: flex; flex-direction: row; align-items: center;
-  padding: 8px; gap: 12px;
-  width: 100%; max-width: 520px;
-  background: #FFFFFF;
-  border: 1px solid #D1FAE5; border-radius: 16px;
-  box-shadow: 0px 20px 40px -5px rgba(15,23,42,0.1);
-}
-.refer-input {
-  flex: 1; align-self: stretch; min-width: 0;
-  background: #F8FAFC; border-radius: 12px;
-  border: none; outline: none;
-  padding: 14px 16px;
-  font-family: 'Liberation Mono', monospace; font-weight: 400; font-size: 14px;
-  line-height: 20px; color: #0F172A;
-}
-.refer-copy-btn {
-  display: flex; justify-content: center; align-items: center;
-  padding: 12px 32px;
-  width: 139.03px; height: 48px;
-  background: #0F172A; border-radius: 12px;
-  box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1), 0px 4px 6px -4px rgba(0,0,0,0.1);
-  border: none; cursor: pointer; flex-shrink: 0;
-  font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 16px;
-  line-height: 24px; color: #FFFFFF; text-align: center;
-}
-
 /* ─── FOOTER ─── */
 .footer-section {
   display: flex; flex-direction: column; align-items: center;
@@ -1914,23 +1859,6 @@ body {
     </div>
   </div>
 
-  <!-- ─── REFER & EARN ─── -->
-  <div class="refer-section">
-    <div class="refer-h2-wrap">
-      <h2 class="refer-h2">Refer &amp; Earn Rewards</h2>
-    </div>
-    <div class="refer-sub-wrap">
-      <p class="refer-sub">Spread the word and get rewarded for growing the SynkSpace community.</p>
-    </div>
-    <div class="refer-amt-wrap">
-      <span class="refer-amt">Amazing gifts await you — spread the word!</span>
-    </div>
-    <div class="refer-input-box">
-      <input class="refer-input" type="text" value="sync.market/ref/creator_jane" readonly id="referLink">
-      <button class="refer-copy-btn" onclick="copyRef(this)">Copy Link</button>
-    </div>
-  </div>
-
   <!-- ─── FAQ ─── -->
   <div class="faq-section">
     <div class="faq-inner">
@@ -2054,16 +1982,6 @@ function toggleFaq(card) {
 function switchTab(el) {
   document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-}
-function copyRef(btn) {
-  const val = document.getElementById('referLink').value;
-  navigator.clipboard.writeText(val).then(() => {
-    btn.textContent = 'Copied!';
-    setTimeout(() => btn.textContent = 'Copy Link', 2000);
-  }).catch(() => {
-    btn.textContent = 'Copied!';
-    setTimeout(() => btn.textContent = 'Copy Link', 2000);
-  });
 }
 
 // ── Registration Modal ──────────────────────────────────────────────────────
