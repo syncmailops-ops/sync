@@ -1385,18 +1385,18 @@ body {
   .header-content-wrap { height: auto; }
   .header-row          {
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     padding: 0 20px;
     height: auto;
     min-height: unset;
-    gap: 36px;
+    gap: 32px;
   }
-  .header-left         { max-width: 100%; width: 100%; text-align: center; align-items: center; display: flex; flex-direction: column; order: 2; }
-  .hero-badge-pill     { align-self: center; }
-  .hero-h1 h1          { font-size: 38px; line-height: 46px; letter-spacing: -1px; text-align: center; }
-  .hero-subtitle-wrap p{ font-size: 16px; max-width: 100%; text-align: center; }
-  .hero-buttons-row    { flex-wrap: wrap; gap: 10px; justify-content: center; }
-  .hero-trust-row      { justify-content: center; gap: 12px 20px; }
+  .header-left         { max-width: 100%; width: 100%; text-align: left; align-items: flex-start; display: flex; flex-direction: column; order: 2; }
+  .hero-badge-pill     { align-self: flex-start; }
+  .hero-h1 h1          { font-size: 38px; line-height: 46px; letter-spacing: -1px; text-align: left; }
+  .hero-subtitle-wrap p{ font-size: 16px; max-width: 100%; text-align: left; }
+  .hero-buttons-row    { flex-wrap: wrap; gap: 10px; justify-content: flex-start; }
+  .hero-trust-row      { justify-content: flex-start; gap: 12px 20px; }
   .trust-label         { font-size: 13px; }
   .btn-creator, .btn-brand, .btn-event { height: 52px; padding: 12px 22px; }
   .b-text              { font-size: 15px; }
@@ -1467,7 +1467,7 @@ body {
     width: 100%; height: 52px; padding: 12px 20px; justify-content: center;
   }
   .b-text              { font-size: 15px; }
-  .hero-trust-row      { gap: 10px 16px; justify-content: center; }
+  .hero-trust-row      { gap: 10px 16px; justify-content: flex-start; }
   .trust-label         { font-size: 12px; }
 
   /* Hero illustration — carousel already handles layout */
