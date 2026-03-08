@@ -192,7 +192,6 @@ body {
   gap: 24px;
   width: 100%;
   height: auto;
-  min-height: 520px;
   padding: 0 40px 0 48px;
   box-sizing: border-box;
 }
@@ -615,6 +614,59 @@ body {
   font-family: 'Manrope',sans-serif; font-weight: 600; font-size: 10px; color: #16A34A;
 }
 
+/* ── Mobile hero carousel ─────────────────────────────────────────── */
+.hi-mobile-carousel {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 14px;
+  overflow: hidden;
+  padding: 8px 0 4px;
+}
+.hi-carousel-track {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 100%;
+  will-change: transform;
+}
+.hi-carousel-slide {
+  min-width: 100%;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 4px 16px 12px;
+}
+/* Shared slide card styling — no float animation, self-contained */
+.hi-cmain, .hi-cearn, .hi-clive {
+  background: #FFFFFF;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(15,23,42,0.10), 0 2px 8px rgba(15,23,42,0.05);
+  border: 1px solid rgba(226,232,240,0.8);
+  padding: 22px;
+  width: calc(100% - 32px);
+  max-width: 300px;
+  animation: none !important; /* no floating */
+  position: relative !important;
+  top: auto !important; left: auto !important;
+  right: auto !important; bottom: auto !important;
+}
+/* Carousel dots */
+.hi-carousel-dots {
+  display: flex; gap: 8px; justify-content: center;
+  padding-top: 4px;
+}
+.hi-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #CBD5E1; cursor: pointer;
+  transition: all 0.3s ease;
+}
+.hi-dot.hi-dot-active {
+  width: 22px; border-radius: 4px;
+  background: linear-gradient(90deg, #3B82F6, #8B5CF6);
+}
 /* Dashed connection lines between cards */
 .hi-connector {
   position: absolute;
@@ -974,28 +1026,31 @@ body {
   .sp-title   { font-size: 15px; }
   .sp-desc    { font-size: 13px; line-height: 20px; }
 
-  /* Mobile scroll-stack: single column, cards slide up from below as you scroll */
+  /* Mobile: single column, each card appears individually as you scroll to it */
   .sp-grid {
     grid-template-columns: 1fr;
-    gap: 0;
+    gap: 20px;
     display: flex;
     flex-direction: column;
+    align-items: center;
   }
   .sp-card {
-    border-radius: 18px;
-    margin-bottom: 0;
-    /* Sticky stack effect — each card peeks above the previous */
-    position: sticky;
-    top: 72px; /* below nav */
+    width: 100%;
+    max-width: 380px;
+    position: relative;
+    top: auto;
+    margin-top: 0;
+    opacity: 0;
+    transform: translateY(48px) scale(0.94);
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22,1,0.36,1);
+    transition-delay: 0s !important; /* JS controls timing per card */
   }
-  .sp-c1 { top: 72px;  z-index: 10; }
-  .sp-c2 { top: 88px;  z-index: 11; margin-top: -12px; }
-  .sp-c3 { top: 104px; z-index: 12; margin-top: -12px; }
-  .sp-c4 { top: 120px; z-index: 13; margin-top: -12px; }
-  .sp-c5 { top: 136px; z-index: 14; margin-top: -12px; }
-  .sp-c6 { top: 152px; z-index: 15; margin-top: -12px; }
-  /* Disable the lift hover on mobile so sticky doesn't break */
-  .sp-card:hover { transform: none; }
+  .sp-card.sp-visible {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
+    animation: none !important;
+  }
+  .sp-card:hover { transform: translateY(0) scale(1); }
 }
 @media (max-width: 360px) { .sp-section { padding: 40px 12px; } }
 
@@ -1338,16 +1393,29 @@ body {
   .btn-creator, .btn-brand, .btn-event { height: 52px; padding: 12px 22px; }
   .b-text              { font-size: 15px; }
 
-  /* Hero illustration — centered below text, scaled down */
+  /* Hero illustration — carousel only, no floating cards */
   .hero-illustration   {
-    width: 100%; max-width: 420px; min-width: unset;
-    height: 320px; align-self: center; order: 2; margin: 0 auto;
+    width: 100%;
+    max-width: 440px;
+    min-width: unset;
+    height: auto !important;
+    min-height: unset !important;
+    align-self: center;
+    order: 2;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
   }
-  .hi-main             { width: 185px; padding: 14px; }
-  .hi-earn             { width: 142px; top: 8px; left: 4px; }
-  .hi-match            { width: 152px; bottom: 8px; left: 4px; }
-  .hi-live             { width: 142px; top: 8px; right: 4px; }
-  .hi-escrow           { width: 130px; bottom: 8px; right: 4px; }
+  /* Completely remove desktop floating cards from layout */
+  .hi-desktop-card {
+    display: none !important;
+    visibility: hidden !important;
+    position: fixed !important;
+    top: -9999px !important;
+    pointer-events: none !important;
+  }
+  .hi-mobile-carousel  { display: flex; }
 
   /* Refer */
   .refer-section       { padding: 56px 20px; gap: 16px; }
@@ -1393,22 +1461,8 @@ body {
   .hero-trust-row      { gap: 10px 16px; justify-content: center; }
   .trust-label         { font-size: 12px; }
 
-  /* Hero illustration — compact on small phones */
-  .hero-illustration   { height: 260px; max-width: 360px; }
-  .hi-main             { width: 160px; padding: 12px; }
-  .hi-main-name        { font-size: 12px; }
-  .hi-stat-num         { font-size: 13px; }
-  .hi-stat-label       { font-size: 9px; }
-  .hi-earn             { width: 125px; top: 5px; left: 0; }
-  .hi-earn-amount      { font-size: 15px; }
-  .hi-earn-label       { font-size: 10px; }
-  .hi-match            { width: 136px; bottom: 5px; left: 0; }
-  .hi-match-title      { font-size: 11px; }
-  .hi-live             { width: 125px; top: 5px; right: 0; }
-  .hi-live-num         { font-size: 15px; }
-  .hi-escrow           { width: 116px; bottom: 5px; right: 0; }
-  .hi-escrow-val       { font-size: 14px; }
-  .hi-spark-bar        { border-radius: 2px 2px 0 0; }
+  /* Hero illustration — carousel already handles layout */
+  .hero-illustration   { max-width: 340px; }
 
   /* Refer */
   .refer-section       { padding: 48px 16px; gap: 14px; }
@@ -1442,14 +1496,10 @@ body {
   .header-row          { padding: 0 12px; }
   .hero-h1 h1          { font-size: 26px; line-height: 33px; }
   .hero-subtitle-wrap p{ font-size: 14px; }
-  .hero-illustration   { height: 230px; }
-  .hi-main             { width: 148px; padding: 10px; }
-  .hi-earn             { width: 112px; }
-  .hi-earn-amount      { font-size: 13px; }
-  .hi-match            { width: 120px; }
-  .hi-live             { width: 112px; }
-  .hi-live-num         { font-size: 13px; }
-  .hi-escrow           { width: 104px; }
+  .hero-illustration   { max-width: 300px; }
+  .hi-cmain, .hi-cearn, .hi-clive { padding: 16px; }
+  .hi-stat-num         { font-size: 13px; }
+  .hi-earn-amount      { font-size: 20px; }
   .how-section         { padding: 40px 12px; }
   .sp-section          { padding: 40px 12px; }
   .refer-section       { padding: 40px 12px; }
@@ -1652,6 +1702,9 @@ body {
   font-family: 'Manrope', sans-serif;
   font-weight: 700; font-size: 14px;
   color: #E2E8F0; text-decoration: none;
+  cursor: pointer;
+  pointer-events: all;
+  position: relative; z-index: 10;
   transition: background 0.2s, border-color 0.2s, transform 0.2s;
 }
 .faq-contact-btn:hover {
@@ -1763,8 +1816,9 @@ body {
         <!-- RIGHT: Illustration — Creator Marketplace Dashboard -->
         <div class="hero-illustration">
 
+          <!-- Desktop: floating cards (absolute positioned) -->
           <!-- Earnings card — top left -->
-          <div class="hi-card hi-earn">
+          <div class="hi-card hi-earn hi-desktop-card">
             <div class="hi-earn-label">Total Earned</div>
             <div class="hi-earn-amount">₹2,40,000</div>
             <div class="hi-earn-badge">
@@ -1783,7 +1837,7 @@ body {
           </div>
 
           <!-- Active matches card — bottom left -->
-          <div class="hi-card hi-match">
+          <div class="hi-card hi-match hi-desktop-card">
             <div class="hi-match-header">
               <div class="hi-match-dot"></div>
               <div class="hi-match-title">Active Matches</div>
@@ -1798,7 +1852,7 @@ body {
           </div>
 
           <!-- Central creator profile card -->
-          <div class="hi-card hi-main">
+          <div class="hi-card hi-main hi-desktop-card">
             <div class="hi-main-header">
               <div class="hi-main-avatar">P</div>
               <div class="hi-main-info">
@@ -1845,7 +1899,7 @@ body {
           </div>
 
           <!-- Campaign live card — top right -->
-          <div class="hi-card hi-live">
+          <div class="hi-card hi-live hi-desktop-card">
             <div class="hi-live-top">
               <div class="hi-live-badge">
                 <div class="hi-live-dot"></div>
@@ -1860,7 +1914,7 @@ body {
           </div>
 
           <!-- Escrow card — bottom right -->
-          <div class="hi-card hi-escrow">
+          <div class="hi-card hi-escrow hi-desktop-card">
             <div class="hi-escrow-icon">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                 <rect x="1" y="7" width="16" height="10" rx="2" stroke="#3B82F6" stroke-width="1.5"/>
@@ -1875,6 +1929,93 @@ body {
                 <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3 5.5L6.5 2" stroke="#16A34A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </div>
               <span class="hi-escrow-status-text">Protected & Safe</span>
+            </div>
+          </div>
+
+          <!-- Mobile: auto-cycling carousel (one card visible at a time) -->
+          <div class="hi-mobile-carousel" id="hiCarousel">
+            <div class="hi-carousel-track" id="hiTrack">
+
+              <!-- Slide 1: Profile card -->
+              <div class="hi-carousel-slide">
+                <div class="hi-cmain">
+                  <div class="hi-main-header">
+                    <div class="hi-main-avatar">P</div>
+                    <div class="hi-main-info">
+                      <div class="hi-main-name">Priya Sharma</div>
+                      <div class="hi-main-role">Lifestyle · Mumbai</div>
+                    </div>
+                    <div class="hi-verified">
+                      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5L4 7L8 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                  </div>
+                  <div class="hi-stats-row">
+                    <div class="hi-stat-box"><div class="hi-stat-num">4.2M</div><div class="hi-stat-label">Followers</div></div>
+                    <div class="hi-stat-box"><div class="hi-stat-num">8.4%</div><div class="hi-stat-label">Eng. Rate</div></div>
+                    <div class="hi-stat-box"><div class="hi-stat-num">32</div><div class="hi-stat-label">Campaigns</div></div>
+                  </div>
+                  <div class="hi-progress-wrap">
+                    <div class="hi-progress-label"><span class="hi-progress-text">Profile Match Score</span><span class="hi-progress-pct">94%</span></div>
+                    <div class="hi-progress-bar"><div class="hi-progress-fill" style="width:94%"></div></div>
+                  </div>
+                  <div class="hi-progress-wrap">
+                    <div class="hi-progress-label"><span class="hi-progress-text">Campaign Completion</span><span class="hi-progress-pct">87%</span></div>
+                    <div class="hi-progress-bar"><div class="hi-progress-fill" style="width:87%;background:linear-gradient(90deg,#059669,#22C55E);"></div></div>
+                  </div>
+                  <button class="hi-match-btn">View Full Profile →</button>
+                </div>
+              </div>
+
+              <!-- Slide 2: Earnings card -->
+              <div class="hi-carousel-slide">
+                <div class="hi-cearn">
+                  <div class="hi-earn-label">Total Earned</div>
+                  <div class="hi-earn-amount">₹2,40,000</div>
+                  <div class="hi-earn-badge">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 7L5 3L8 7" stroke="#16A34A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span>+24% this month</span>
+                  </div>
+                  <div class="hi-sparkline" style="height:40px;margin-top:14px;">
+                    <div class="hi-spark-bar" style="height:40%"></div>
+                    <div class="hi-spark-bar" style="height:55%"></div>
+                    <div class="hi-spark-bar" style="height:45%"></div>
+                    <div class="hi-spark-bar" style="height:70%"></div>
+                    <div class="hi-spark-bar" style="height:60%"></div>
+                    <div class="hi-spark-bar" style="height:85%"></div>
+                    <div class="hi-spark-bar" style="height:100%;opacity:1;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 3: Live campaign + matches -->
+              <div class="hi-carousel-slide">
+                <div class="hi-clive">
+                  <div class="hi-live-top">
+                    <div class="hi-live-badge"><div class="hi-live-dot"></div><span class="hi-live-text">LIVE</span></div>
+                  </div>
+                  <div class="hi-live-num">12,480</div>
+                  <div class="hi-live-sub">Campaign impressions</div>
+                  <div class="hi-live-bar" style="margin-bottom:20px;"><div class="hi-live-fill"></div></div>
+                  <div class="hi-match-header" style="margin-top:8px;">
+                    <div class="hi-match-dot"></div>
+                    <div class="hi-match-title">Active Matches</div>
+                  </div>
+                  <div class="hi-match-avatars" style="margin-top:8px;">
+                    <div class="hi-avatar-sm" style="background:linear-gradient(135deg,#3B82F6,#6366F1);">A</div>
+                    <div class="hi-avatar-sm" style="background:linear-gradient(135deg,#EC4899,#F43F5E);">M</div>
+                    <div class="hi-avatar-sm" style="background:linear-gradient(135deg,#F97316,#EAB308);">Z</div>
+                    <div class="hi-avatar-sm" style="background:linear-gradient(135deg,#14B8A6,#22C55E);">+5</div>
+                  </div>
+                  <div class="hi-match-sub">8 brands waiting for you</div>
+                </div>
+              </div>
+
+            </div>
+            <!-- Dots -->
+            <div class="hi-carousel-dots">
+              <div class="hi-dot hi-dot-active" onclick="hiGoTo(0)"></div>
+              <div class="hi-dot" onclick="hiGoTo(1)"></div>
+              <div class="hi-dot" onclick="hiGoTo(2)"></div>
             </div>
           </div>
 
@@ -2096,7 +2237,7 @@ body {
 
       <div class="faq-bottom">
         <span class="faq-bottom-text">Still have questions?</span>
-        <a href="/cdn-cgi/l/email-protection#b8d1d6ded7f8cbc1d6d3cbc8d9dbdd96d1d6" class="faq-contact-btn">
+        <a href="/cdn-cgi/l/email-protection#751c1b131a35060c1b1e06051416105b1c1b" class="faq-contact-btn">
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1" y="3" width="13" height="9" rx="1.5" stroke="#E2E8F0" stroke-width="1.4"/><path d="M1 4.5l6.5 4.5L14 4.5" stroke="#E2E8F0" stroke-width="1.4" stroke-linecap="round"/></svg>
           Contact Us
         </a>
@@ -2137,18 +2278,75 @@ function switchTab(el) {
   el.classList.add('active');
 }
 
+// ── Hero mobile carousel ────────────────────────────────────────────
+(function() {
+  var current = 0;
+  var total = 3;
+  var timer;
+
+  function hiGoTo(idx) {
+    current = ((idx % total) + total) % total;
+    var track = document.getElementById('hiTrack');
+    if (!track) return;
+    track.style.transform = 'translateX(' + (-current * 100) + '%)';
+    track.style.transition = 'transform 0.45s cubic-bezier(0.4,0,0.2,1)';
+    // Update dots
+    var dots = document.querySelectorAll('.hi-dot');
+    dots.forEach(function(d, i) {
+      d.classList.toggle('hi-dot-active', i === current);
+    });
+  }
+
+  window.hiGoTo = hiGoTo;
+
+  function startAutoPlay() {
+    clearInterval(timer);
+    timer = setInterval(function() { hiGoTo(current + 1); }, 3200);
+  }
+
+  function init() {
+    var carousel = document.getElementById('hiCarousel');
+    if (!carousel) return;
+    startAutoPlay();
+    carousel.addEventListener('touchstart', function() { clearInterval(timer); }, { passive: true });
+    carousel.addEventListener('touchend', function() { startAutoPlay(); }, { passive: true });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+
 // ── Platform Superpowers entrance animation ────────────────────────
 (function() {
   function initSpObserver() {
     const cards = document.querySelectorAll('.sp-card');
     if (!cards.length) return;
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('sp-visible'); obs.unobserve(e.target); }
-      });
-    }, { threshold: 0.12 });
-    cards.forEach(c => obs.observe(c));
+
+    const isMobile = () => window.innerWidth <= 480;
+
+    // Each card gets its own observer so it fires exactly when that card enters view
+    cards.forEach(function(card, i) {
+      // On mobile: higher threshold so card is well into view before animating
+      // On desktop: lower threshold, slight stagger via animation-delay in CSS
+      const threshold = isMobile() ? 0.35 : 0.12;
+
+      const obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) {
+            // On mobile remove all transition-delays — each card fires at its own scroll position
+            if (isMobile()) {
+              e.target.style.transitionDelay = '0s';
+            }
+            e.target.classList.add('sp-visible');
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: threshold, rootMargin: '0px 0px -60px 0px' });
+
+      obs.observe(card);
+    });
   }
+
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initSpObserver);
   else initSpObserver();
 })();
@@ -3224,10 +3422,4 @@ function copySsRef(btn) {
   navigator.clipboard.writeText(val).then(function() {
     btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l4 4 6-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Copied!';
     setTimeout(function() {
-      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="4" width="9" height="9" rx="1.5" stroke="white" stroke-width="1.4"/><path d="M1 10V2a1 1 0 011-1h8" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg> Copy';
-    }, 2000);
-  });
-}
-</script>
-</body>
-</html>
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="4" width="9" height="9" rx="1.5" stroke="white" stroke-width="1.4"/><pat
