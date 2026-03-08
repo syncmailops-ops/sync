@@ -249,9 +249,13 @@ model Review {
 }
 
 model Waitlist {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  role      Role
-  name      String?
-  createdAt DateTime @default(now())
+  id            String   @id @default(cuid())
+  email         String   @unique
+  role          Role
+  name          String?
+  referralCode  String   @unique
+  referredBy    String?
+  referralCount Int      @default(0)
+  createdAt     DateTime @default(now())
 }
+
