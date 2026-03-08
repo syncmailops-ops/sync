@@ -284,7 +284,8 @@ body {
 .hero-trust-row {
   display: flex;
   flex-direction: row;
-  gap: 24px;
+  flex-wrap: wrap;
+  gap: 16px 24px;
   align-items: center;
 }
 
@@ -389,12 +390,12 @@ body {
 }
 
 /* Trust badges */
-.trust-1, .trust-2, .trust-3 { display: flex; align-items: center; gap: 6px; }
-.trust-label { font-family: 'Manrope', sans-serif; font-weight: 500; font-size: 14px; line-height: 20px; color: #64748B; }
+.trust-1, .trust-2, .trust-3 { display: flex; align-items: center; gap: 6px; white-space: nowrap; flex-shrink: 0; }
+.trust-label { font-family: 'Manrope', sans-serif; font-weight: 500; font-size: 14px; line-height: 20px; color: #64748B; white-space: nowrap; }
 
 /* Hero Illustration */
 .hero-illustration {
-  width: 480px; max-width: 50vw; min-width: 360px; height: 480px;
+  width: 480px; max-width: 48vw; min-width: 320px; height: 480px;
   flex: none; order: 1; flex-shrink: 0;
   position: relative; display: flex; align-items: center; justify-content: center;
 }
@@ -969,10 +970,32 @@ body {
 }
 @media (max-width: 480px) {
   .sp-section { padding: 48px 16px 56px; }
-  .sp-grid    { grid-template-columns: 1fr; gap: 12px; }
   .sp-h2      { font-size: 22px; line-height: 30px; }
   .sp-title   { font-size: 15px; }
   .sp-desc    { font-size: 13px; line-height: 20px; }
+
+  /* Mobile scroll-stack: single column, cards slide up from below as you scroll */
+  .sp-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .sp-card {
+    border-radius: 18px;
+    margin-bottom: 0;
+    /* Sticky stack effect — each card peeks above the previous */
+    position: sticky;
+    top: 72px; /* below nav */
+  }
+  .sp-c1 { top: 72px;  z-index: 10; }
+  .sp-c2 { top: 88px;  z-index: 11; margin-top: -12px; }
+  .sp-c3 { top: 104px; z-index: 12; margin-top: -12px; }
+  .sp-c4 { top: 120px; z-index: 13; margin-top: -12px; }
+  .sp-c5 { top: 136px; z-index: 14; margin-top: -12px; }
+  .sp-c6 { top: 152px; z-index: 15; margin-top: -12px; }
+  /* Disable the lift hover on mobile so sticky doesn't break */
+  .sp-card:hover { transform: none; }
 }
 @media (max-width: 360px) { .sp-section { padding: 40px 12px; } }
 
@@ -1258,7 +1281,6 @@ body {
    RESPONSIVE — Full breakpoint system
 ══════════════════════════════════════════════════ */
 
-/* ── Large desktop (≤1280px) ── */
 /* ══════════════════════════════════════════════════════
    RESPONSIVE SYSTEM — 1280 / 1024 / 768 / 480 / 360
 ══════════════════════════════════════════════════════ */
@@ -1267,30 +1289,24 @@ body {
 @media (max-width: 1280px) {
   .nav-container       { padding: 14px 32px; }
   .header-row          { padding: 0 32px; }
-  /* How it works — handled inside component CSS */
-  /* Superpowers — handled inside component CSS */
   .refer-section       { padding: 72px 32px; }
   .footer-section      { padding: 72px 32px; }
 }
 
 /* ─ Tablet landscape (≤1024px) ─ */
 @media (max-width: 1024px) {
-  /* Nav */
   .nav-container       { padding: 12px 24px; }
-
-  /* Hero */
   .header              { padding: 60px 0 80px; }
   .header-row          { padding: 0 24px; gap: 28px; }
   .header-left         { max-width: 420px; }
   .hero-h1 h1          { font-size: 52px; line-height: 58px; }
   .hero-subtitle-wrap p{ font-size: 17px; }
-  .hero-illustration   { width: 420px; min-width: 280px; height: 440px; }
-
-  /* How it works — handled inside component CSS */
-
-  /* Superpowers — handled inside component CSS */
-
-  /* Refer / Footer */
+  .hero-illustration   { width: 400px; min-width: 300px; max-width: 45vw; height: 420px; }
+  .hi-earn             { width: 148px; left: 6px; }
+  .hi-match            { width: 158px; left: 6px; }
+  .hi-live             { width: 148px; right: 6px; }
+  .hi-escrow           { width: 136px; right: 6px; }
+  .hi-main             { width: 200px; }
   .refer-section       { padding: 64px 24px; }
   .footer-section      { padding: 64px 24px; }
 }
@@ -1302,38 +1318,36 @@ body {
   .nav-logo-text       { font-size: 20px; }
 
   /* Hero — stack vertically */
-  .header              { padding: 44px 0 56px; min-height: unset; }
+  .header              { padding: 36px 0 52px; min-height: unset; }
   .header-content-wrap { height: auto; }
   .header-row          {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     padding: 0 20px;
     height: auto;
     min-height: unset;
-    gap: 40px;
+    gap: 36px;
   }
-  .header-left         { max-width: 100%; width: 100%; flex-shrink: 1; }
-  .hero-h1 h1          { font-size: 40px; line-height: 48px; letter-spacing: -1px; }
-  .hero-subtitle-wrap p{ font-size: 16px; max-width: 100%; }
-  .hero-buttons-row    { flex-wrap: wrap; gap: 10px; }
-  .hero-trust-row      { flex-wrap: wrap; gap: 14px; }
-  .btn-creator, .btn-brand, .btn-event { height: 52px; padding: 12px 20px; }
+  .header-left         { max-width: 100%; width: 100%; text-align: center; align-items: center; display: flex; flex-direction: column; }
+  .hero-badge-pill     { align-self: center; }
+  .hero-h1 h1          { font-size: 38px; line-height: 46px; letter-spacing: -1px; text-align: center; }
+  .hero-subtitle-wrap p{ font-size: 16px; max-width: 100%; text-align: center; }
+  .hero-buttons-row    { flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .hero-trust-row      { justify-content: center; gap: 12px 20px; }
+  .trust-label         { font-size: 13px; }
+  .btn-creator, .btn-brand, .btn-event { height: 52px; padding: 12px 22px; }
   .b-text              { font-size: 15px; }
 
-  /* Hero illustration — full width below text */
+  /* Hero illustration — centered below text, scaled down */
   .hero-illustration   {
-    width: 100%; max-width: 100%; min-width: unset;
-    height: 340px; align-self: center; order: 2;
+    width: 100%; max-width: 420px; min-width: unset;
+    height: 320px; align-self: center; order: 2; margin: 0 auto;
   }
-  .hi-main             { width: 195px; }
-  .hi-earn             { width: 150px; top: 10px; left: 2px; }
-  .hi-match            { width: 162px; bottom: 10px; left: 2px; }
-  .hi-live             { width: 150px; top: 10px; right: 2px; }
-  .hi-escrow           { width: 140px; bottom: 10px; right: 2px; }
-
-  /* How it works — handled inside component CSS */
-
-  /* Superpowers — handled inside component CSS */
+  .hi-main             { width: 185px; padding: 14px; }
+  .hi-earn             { width: 142px; top: 8px; left: 4px; }
+  .hi-match            { width: 152px; bottom: 8px; left: 4px; }
+  .hi-live             { width: 142px; top: 8px; right: 4px; }
+  .hi-escrow           { width: 130px; bottom: 8px; right: 4px; }
 
   /* Refer */
   .refer-section       { padding: 56px 20px; gap: 16px; }
@@ -1364,37 +1378,37 @@ body {
   .nav-cta-btn         { padding: 8px 14px; font-size: 13px; height: 36px; }
 
   /* Hero */
-  .header              { padding: 36px 0 48px; }
-  .header-row          { padding: 0 16px; gap: 32px; }
-  .hero-badge-pill     { margin-bottom: 16px; }
-  .hero-h1 h1          { font-size: 32px; line-height: 40px; letter-spacing: -0.8px; }
-  .hero-subtitle-wrap  { margin-bottom: 24px; }
+  .header              { padding: 28px 0 40px; }
+  .header-row          { padding: 0 16px; gap: 28px; }
+  .hero-badge-pill     { margin-bottom: 14px; }
+  .hero-h1 h1          { font-size: 30px; line-height: 38px; letter-spacing: -0.8px; }
+  .hero-subtitle-wrap  { margin-bottom: 20px; }
   .hero-subtitle-wrap p{ font-size: 15px; line-height: 22px; }
-  .hero-cta-area       { gap: 18px; }
-  .hero-buttons-row    { flex-direction: column; gap: 8px; }
+  .hero-cta-area       { gap: 16px; width: 100%; }
+  .hero-buttons-row    { flex-direction: column; gap: 8px; width: 100%; }
   .btn-creator, .btn-brand, .btn-event {
     width: 100%; height: 52px; padding: 12px 20px; justify-content: center;
   }
   .b-text              { font-size: 15px; }
-  .hero-trust-row      { gap: 12px; }
-  .trust-label         { font-size: 13px; }
+  .hero-trust-row      { gap: 10px 16px; justify-content: center; }
+  .trust-label         { font-size: 12px; }
 
-  /* Hero illustration */
-  .hero-illustration   { height: 290px; }
-  .hi-main             { width: 175px; padding: 14px; }
-  .hi-main-name        { font-size: 13px; }
-  .hi-stat-num         { font-size: 14px; }
+  /* Hero illustration — compact on small phones */
+  .hero-illustration   { height: 260px; max-width: 360px; }
+  .hi-main             { width: 160px; padding: 12px; }
+  .hi-main-name        { font-size: 12px; }
+  .hi-stat-num         { font-size: 13px; }
   .hi-stat-label       { font-size: 9px; }
-  .hi-earn             { width: 134px; }
-  .hi-earn-amount      { font-size: 17px; }
-  .hi-match            { width: 146px; }
-  .hi-live             { width: 134px; }
-  .hi-live-num         { font-size: 16px; }
-  .hi-escrow           { width: 122px; }
-
-  /* How it works — handled inside component CSS */
-
-  /* Superpowers — handled inside component CSS */
+  .hi-earn             { width: 125px; top: 5px; left: 0; }
+  .hi-earn-amount      { font-size: 15px; }
+  .hi-earn-label       { font-size: 10px; }
+  .hi-match            { width: 136px; bottom: 5px; left: 0; }
+  .hi-match-title      { font-size: 11px; }
+  .hi-live             { width: 125px; top: 5px; right: 0; }
+  .hi-live-num         { font-size: 15px; }
+  .hi-escrow           { width: 116px; bottom: 5px; right: 0; }
+  .hi-escrow-val       { font-size: 14px; }
+  .hi-spark-bar        { border-radius: 2px 2px 0 0; }
 
   /* Refer */
   .refer-section       { padding: 48px 16px; gap: 14px; }
@@ -1426,8 +1440,16 @@ body {
 /* ─ Small mobile (≤360px) ─ */
 @media (max-width: 360px) {
   .header-row          { padding: 0 12px; }
-  .hero-h1 h1          { font-size: 27px; line-height: 34px; }
+  .hero-h1 h1          { font-size: 26px; line-height: 33px; }
   .hero-subtitle-wrap p{ font-size: 14px; }
+  .hero-illustration   { height: 230px; }
+  .hi-main             { width: 148px; padding: 10px; }
+  .hi-earn             { width: 112px; }
+  .hi-earn-amount      { font-size: 13px; }
+  .hi-match            { width: 120px; }
+  .hi-live             { width: 112px; }
+  .hi-live-num         { font-size: 13px; }
+  .hi-escrow           { width: 104px; }
   .how-section         { padding: 40px 12px; }
   .sp-section          { padding: 40px 12px; }
   .refer-section       { padding: 40px 12px; }
@@ -2074,7 +2096,7 @@ body {
 
       <div class="faq-bottom">
         <span class="faq-bottom-text">Still have questions?</span>
-        <a href="mailto:info@synkspace.in" class="faq-contact-btn">
+        <a href="/cdn-cgi/l/email-protection#b8d1d6ded7f8cbc1d6d3cbc8d9dbdd96d1d6" class="faq-contact-btn">
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1" y="3" width="13" height="9" rx="1.5" stroke="#E2E8F0" stroke-width="1.4"/><path d="M1 4.5l6.5 4.5L14 4.5" stroke="#E2E8F0" stroke-width="1.4" stroke-linecap="round"/></svg>
           Contact Us
         </a>
