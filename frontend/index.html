@@ -2556,94 +2556,177 @@ async function submitForm(role) {
   </div><!-- end reg-modal -->
 </div><!-- end reg-overlay -->
 
-<!-- ═══════════════════════════════════════════════
-     FULL-SCREEN SUCCESS / CONGRATULATIONS OVERLAY
-═══════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════
+     SYNKSPACE — CONGRATULATIONS / REFERRAL SCREEN
+═══════════════════════════════════════════════════════════ -->
 <style>
+/* ── Base overlay ── */
 #success-screen {
   position: fixed; inset: 0; z-index: 20000;
-  background: radial-gradient(ellipse at 60% 0%, rgba(139,92,246,0.28) 0%, transparent 55%),
-              radial-gradient(ellipse at 10% 100%, rgba(59,130,246,0.22) 0%, transparent 50%),
-              radial-gradient(ellipse at 90% 80%, rgba(236,72,153,0.18) 0%, transparent 45%),
-              #060B18;
-  display: none;
-  flex-direction: column;
-  align-items: center;
+  display: none; flex-direction: column;
+  background: #020617;
   overflow-y: auto;
-  padding: 0;
+  font-family: 'Manrope', sans-serif;
 }
 #success-screen.show { display: flex; }
 
-/* Top bar */
+/* Ambient background blobs */
+#success-screen::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 700px 500px at 80% -10%, rgba(139,92,246,0.22) 0%, transparent 65%),
+    radial-gradient(ellipse 600px 400px at -10% 90%, rgba(59,130,246,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 400px 400px at 50% 50%, rgba(15,23,42,0.6) 0%, transparent 80%);
+}
+
+/* ── Top bar ── */
 .ss-topbar {
-  width: 100%; padding: 18px 28px;
-  display: flex; align-items: center;
+  position: relative; z-index: 1;
+  width: 100%; padding: 20px 36px;
+  display: flex; align-items: center; justify-content: space-between;
   flex-shrink: 0;
 }
 .ss-home-btn {
-  width: 44px; height: 44px; border-radius: 50%;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.14);
+  width: 42px; height: 42px; border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; text-decoration: none;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
 }
-.ss-home-btn:hover { background: rgba(255,255,255,0.14); }
+.ss-home-btn:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(99,102,241,0.4);
+  transform: translateY(-1px);
+}
+.ss-topbar-logo {
+  display: flex; align-items: center; gap: 4px;
+}
+.ss-topbar-logo-text {
+  font-weight: 800; font-size: 18px; letter-spacing: -0.4px; color: #FFFFFF;
+}
+.ss-topbar-badge {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 14px;
+  background: rgba(34,197,94,0.12);
+  border: 1px solid rgba(34,197,94,0.25);
+  border-radius: 9999px;
+}
+.ss-topbar-badge-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #22C55E;
+  animation: pulse 2s infinite;
+}
+.ss-topbar-badge-text {
+  font-weight: 700; font-size: 12px; letter-spacing: 0.5px;
+  text-transform: uppercase; color: #4ADE80;
+}
 
-/* Hero text */
+/* ── Hero block ── */
 .ss-hero {
-  text-align: center;
-  padding: 16px 24px 40px;
+  position: relative; z-index: 1;
+  text-align: center; padding: 12px 24px 48px;
   flex-shrink: 0;
 }
 .ss-congrats {
-  font-family: 'Georgia', serif;
-  font-size: 64px; font-weight: 400;
-  line-height: 1.1;
-  background: linear-gradient(135deg, #F9A8D4 0%, #FFFFFF 50%, #F9A8D4 100%);
+  font-size: 72px; font-weight: 800;
+  line-height: 1.05; letter-spacing: -2.5px;
+  background: linear-gradient(135deg, #FFFFFF 0%, #C4B5FD 40%, #F9A8D4 75%, #FFFFFF 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  margin-bottom: 12px;
-  font-style: italic;
+  margin-bottom: 16px;
 }
 .ss-subtitle {
-  font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 20px;
-  color: #E2E8F0; letter-spacing: -0.3px;
+  font-weight: 600; font-size: 20px; color: #94A3B8;
+  letter-spacing: -0.2px;
 }
-.ss-subtitle span {
-  text-decoration: underline;
-  text-decoration-color: rgba(236,72,153,0.6);
-  text-underline-offset: 4px;
+.ss-subtitle .ss-sub-highlight {
+  color: #FFFFFF; font-weight: 800;
+}
+.ss-subtitle .ss-sub-confirmed {
+  background: linear-gradient(90deg, #3B82F6, #8B5CF6);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  font-weight: 800;
+  border-bottom: 2px solid rgba(139,92,246,0.5);
+  padding-bottom: 1px;
 }
 
-/* Main content grid */
+/* ── Divider ── */
+.ss-divider {
+  position: relative; z-index: 1;
+  width: 100%; max-width: 900px; margin: 0 auto 40px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(99,102,241,0.3) 30%, rgba(236,72,153,0.3) 70%, transparent);
+}
+
+/* ── Two-column grid ── */
 .ss-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px;
-  width: 100%; max-width: 1000px;
-  padding: 0 32px 60px;
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  width: 100%; max-width: 940px;
+  margin: 0 auto;
+  padding: 0 32px 72px;
   box-sizing: border-box;
 }
 
-/* Left panel */
-.ss-left h2 {
-  font-family: 'Manrope', sans-serif; font-weight: 800;
-  font-size: 28px; line-height: 36px; letter-spacing: -0.5px;
-  color: #FFFFFF; margin-bottom: 14px;
+/* ── Card base ── */
+.ss-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  padding: 32px;
+  box-sizing: border-box;
+  backdrop-filter: blur(12px);
 }
-.ss-left-sub {
-  font-family: 'Manrope', sans-serif; font-weight: 400; font-size: 15px;
-  line-height: 24px; color: #64748B; margin-bottom: 36px;
+
+/* ── Left card ── */
+.ss-card-left {}
+.ss-card-title {
+  font-weight: 800; font-size: 22px; line-height: 30px;
+  letter-spacing: -0.4px; color: #FFFFFF; margin-bottom: 10px;
+}
+.ss-card-title .ss-brand-name {
+  background: linear-gradient(90deg, #3B82F6, #8B5CF6);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.ss-card-sub {
+  font-weight: 400; font-size: 14px; line-height: 22px;
+  color: #64748B; margin-bottom: 32px;
 }
 
 /* Reward tiers */
-.ss-tiers { display: flex; flex-direction: column; gap: 20px; margin-bottom: 28px; }
+.ss-tiers { display: flex; flex-direction: column; gap: 0; margin-bottom: 28px; }
 .ss-tier {
-  display: flex; align-items: center; gap: 20px;
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.ss-tier:last-child { border-bottom: none; }
+.ss-tier-left {
+  display: flex; align-items: center; gap: 12px;
+  min-width: 110px; flex-shrink: 0;
+}
+.ss-tier-num-badge {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 13px; flex-shrink: 0;
+}
+.ss-tier-num-badge.t1 {
+  background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.2);
+  color: #60A5FA;
+}
+.ss-tier-num-badge.t2 {
+  background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.2);
+  color: #A78BFA;
+}
+.ss-tier-num-badge.t3 {
+  background: linear-gradient(135deg, rgba(249,115,22,0.15), rgba(234,179,8,0.15));
+  border: 1px solid rgba(249,115,22,0.3);
+  color: #FB923C;
 }
 .ss-tier-count {
-  font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 18px;
-  min-width: 80px;
+  font-weight: 800; font-size: 16px;
 }
 .ss-tier-count.t1 { color: #E2E8F0; }
 .ss-tier-count.t2 { color: #E2E8F0; }
@@ -2652,225 +2735,362 @@ async function submitForm(role) {
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 .ss-tier-reward {
-  font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 16px; color: #94A3B8;
+  font-size: 14px; font-weight: 500; color: #94A3B8; line-height: 1.4;
 }
-.ss-tier-reward strong { color: #E2E8F0; font-weight: 700; }
-.ss-tier-reward .ss-brand-italic {
-  font-style: italic; font-weight: 700;
+.ss-tier-reward strong { color: #CBD5E1; font-weight: 700; }
+.ss-tier-reward .ss-pro-badge {
+  display: inline-flex; align-items: center;
+  padding: 2px 8px; border-radius: 6px;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.5px;
   background: linear-gradient(90deg, #3B82F6, #8B5CF6);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  color: #FFFFFF; margin-left: 4px; vertical-align: middle;
 }
+.ss-tier-reward .ss-founder-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 10px; border-radius: 6px;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.5px;
+  background: linear-gradient(90deg, #F97316, #EAB308);
+  color: #FFFFFF; margin-left: 4px; vertical-align: middle;
+}
+
+/* Founder note */
 .ss-founder-note {
   display: flex; align-items: flex-start; gap: 8px;
-  font-family: 'Manrope', sans-serif; font-size: 13px;
-  color: #64748B; line-height: 1.6;
+  padding: 14px 16px;
+  background: rgba(99,102,241,0.06);
+  border: 1px solid rgba(99,102,241,0.15);
+  border-radius: 12px;
+  font-size: 12px; color: #64748B; line-height: 1.6;
 }
-.ss-founder-note a {
-  color: #94A3B8; text-decoration: underline; text-underline-offset: 2px;
-}
+.ss-founder-note a { color: #818CF8; text-decoration: underline; text-underline-offset: 2px; }
 
-/* Right panel */
-.ss-right-title {
-  font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 24px;
+/* ── Right card ── */
+.ss-card-right {}
+.ss-invite-title {
+  font-weight: 800; font-size: 22px; letter-spacing: -0.4px;
   color: #FFFFFF; margin-bottom: 6px;
 }
-.ss-right-sub {
-  font-family: 'Manrope', sans-serif; font-weight: 400; font-size: 14px;
-  color: #64748B; margin-bottom: 20px;
+.ss-invite-sub {
+  font-size: 14px; color: #64748B; margin-bottom: 24px; line-height: 1.5;
 }
-.ss-right-sub strong { color: #A5B4FC; font-weight: 600; }
+.ss-invite-sub strong { color: #818CF8; font-weight: 600; }
 
-/* Link copy box */
-.ss-link-row {
+/* Link box */
+.ss-link-wrap {
   display: flex; gap: 10px; align-items: center; margin-bottom: 20px;
 }
 .ss-link-input {
   flex: 1; height: 48px; padding: 0 16px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.14);
-  border-radius: 10px; outline: none;
-  font-family: 'Liberation Mono', monospace; font-size: 13px; color: #E2E8F0;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px; outline: none;
+  font-family: 'Liberation Mono', monospace; font-size: 12px;
+  color: #CBD5E1;
+  transition: border-color 0.2s;
 }
+.ss-link-input:focus { border-color: rgba(99,102,241,0.5); }
 .ss-copy-btn {
   display: flex; align-items: center; gap: 8px;
-  height: 48px; padding: 0 20px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 10px; cursor: pointer;
-  font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 14px; color: #FFFFFF;
-  transition: background 0.2s; white-space: nowrap; flex-shrink: 0;
+  height: 48px; padding: 0 20px; flex-shrink: 0;
+  background: linear-gradient(135deg, #1E293B, #0F172A);
+  border: 1px solid rgba(99,102,241,0.35);
+  border-radius: 12px; cursor: pointer;
+  font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 14px;
+  color: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.08);
+  transition: all 0.25s ease;
+  position: relative; overflow: visible;
 }
-.ss-copy-btn:hover { background: rgba(255,255,255,0.16); }
+.ss-copy-btn::before {
+  content: '';
+  position: absolute; inset: -2px; border-radius: 14px; padding: 2px;
+  background: conic-gradient(from var(--angle), #3B82F6, #8B5CF6, #EC4899, #3B82F6);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  opacity: 0; transition: opacity 0.3s ease;
+  animation: rotateBorder 2s linear infinite; animation-play-state: paused;
+}
+.ss-copy-btn:hover::before { opacity: 1; animation-play-state: running; }
+.ss-copy-btn:hover {
+  border-color: rgba(99,102,241,0.6);
+  box-shadow: 0 0 0 4px rgba(99,102,241,0.12), 0 4px 14px rgba(15,23,42,0.3);
+  transform: translateY(-1px);
+}
 
-/* Divider */
-.ss-or {
-  display: flex; align-items: center; gap: 12px;
-  font-family: 'Manrope', sans-serif; font-size: 13px; color: #334155;
-  margin-bottom: 20px;
+/* OR divider */
+.ss-or-row {
+  display: flex; align-items: center; gap: 14px;
+  font-size: 12px; color: #334155; margin-bottom: 20px;
 }
-.ss-or::before, .ss-or::after {
-  content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08);
+.ss-or-row::before, .ss-or-row::after {
+  content: ''; flex: 1; height: 1px;
+  background: rgba(255,255,255,0.06);
 }
 
-/* Share via */
+/* Share section */
 .ss-share-label {
-  font-family: 'Manrope', sans-serif; font-size: 13px; color: #64748B; margin-bottom: 14px;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
+  text-transform: uppercase; color: #475569; margin-bottom: 14px;
 }
 .ss-share-icons {
-  display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap;
+  display: flex; gap: 10px; margin-bottom: 32px; flex-wrap: wrap;
 }
 .ss-share-icon {
-  width: 44px; height: 44px; border-radius: 50%;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.12);
+  width: 44px; height: 44px; border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; text-decoration: none;
-  transition: background 0.2s, transform 0.2s;
+  transition: all 0.2s ease;
 }
-.ss-share-icon:hover { background: rgba(255,255,255,0.14); transform: translateY(-2px); }
+.ss-share-icon:hover {
+  background: rgba(99,102,241,0.12);
+  border-color: rgba(99,102,241,0.35);
+  transform: translateY(-2px);
+}
 
-/* Progress bar */
-.ss-progress-wrap { width: 100%; }
+/* Progress tracker */
+.ss-progress-section {}
+.ss-progress-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+}
+.ss-progress-label-text {
+  font-size: 12px; font-weight: 600; color: #475569;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.ss-progress-count {
+  font-size: 12px; font-weight: 700; color: #818CF8;
+}
 .ss-progress-track {
   width: 100%; height: 6px;
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.06);
   border-radius: 9999px; overflow: visible;
-  position: relative; margin-bottom: 14px;
+  position: relative; margin-bottom: 16px;
 }
 .ss-progress-fill {
   height: 100%; width: 0%;
   background: linear-gradient(90deg, #3B82F6, #8B5CF6, #EC4899);
   border-radius: 9999px;
-  transition: width 1s ease;
+  transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
   position: relative;
 }
 .ss-progress-fill::after {
   content: '';
-  position: absolute; right: -4px; top: 50%; transform: translateY(-50%);
-  width: 12px; height: 12px; border-radius: 50%;
+  position: absolute; right: -5px; top: 50%; transform: translateY(-50%);
+  width: 14px; height: 14px; border-radius: 50%;
   background: #FFFFFF;
-  box-shadow: 0 0 0 3px rgba(139,92,246,0.5);
+  box-shadow: 0 0 0 3px rgba(139,92,246,0.5), 0 0 12px rgba(139,92,246,0.4);
 }
 .ss-milestones {
   display: flex; justify-content: space-between;
 }
 .ss-milestone {
-  font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 600;
-  color: #475569; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
 }
-.ss-milestone.reached { color: #A5B4FC; }
-.ss-milestone.active {
+.ss-milestone-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  margin-bottom: 2px;
+}
+.ss-milestone-dot.reached { background: #8B5CF6; border-color: #8B5CF6; }
+.ss-milestone-dot.active {
+  background: linear-gradient(135deg, #F97316, #EAB308);
+  border-color: #F97316;
+  box-shadow: 0 0 8px rgba(249,115,22,0.5);
+}
+.ss-milestone-label {
+  font-size: 11px; font-weight: 700; color: #334155; text-align: center;
+}
+.ss-milestone-label.reached { color: #818CF8; }
+.ss-milestone-label.active {
   background: linear-gradient(90deg, #F97316, #EAB308);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  font-weight: 800;
 }
+.ss-milestone-reward {
+  font-size: 10px; font-weight: 500; color: #1E293B; text-align: center;
+}
+.ss-milestone-reward.reached { color: #4C1D95; }
+.ss-milestone-reward.active { color: #7C2D12; }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .ss-congrats { font-size: 44px; }
-  .ss-subtitle { font-size: 16px; }
-  .ss-grid { grid-template-columns: 1fr; gap: 40px; padding: 0 20px 48px; }
-  .ss-left h2 { font-size: 22px; }
+/* ── Responsive ── */
+@media (max-width: 860px) {
+  .ss-grid { grid-template-columns: 1fr; padding: 0 24px 60px; gap: 20px; }
+  .ss-congrats { font-size: 52px; }
 }
 @media (max-width: 480px) {
-  .ss-congrats { font-size: 36px; }
-  .ss-grid { padding: 0 16px 40px; }
-  .ss-tiers { gap: 16px; }
-  .ss-tier-count { font-size: 16px; min-width: 70px; }
-  .ss-tier-reward { font-size: 14px; }
+  .ss-congrats { font-size: 38px; letter-spacing: -1.5px; }
+  .ss-subtitle { font-size: 16px; }
+  .ss-topbar { padding: 16px 20px; }
+  .ss-hero { padding: 8px 16px 36px; }
+  .ss-grid { padding: 0 16px 48px; }
+  .ss-card { padding: 24px 20px; }
+  .ss-card-title { font-size: 18px; }
+  .ss-invite-title { font-size: 18px; }
 }
 </style>
 
 <div id="success-screen">
+
+  <!-- Top bar -->
   <div class="ss-topbar">
-    <a href="#" class="ss-home-btn" onclick="event.preventDefault();closeSuccessScreen()">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <path d="M2 7.5L9 2L16 7.5V16H11.5V11.5H6.5V16H2V7.5Z" stroke="white" stroke-width="1.6" stroke-linejoin="round"/>
+    <a href="#" class="ss-home-btn" onclick="event.preventDefault();closeSuccessScreen()" title="Back to home">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M1.5 7L8 1.5L14.5 7V14.5H10V10H6V14.5H1.5V7Z" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
       </svg>
     </a>
+    <div class="ss-topbar-logo">
+      <img src="assets/synkspace-logo.png" width="28" height="28" style="object-fit:contain;" alt="SynkSpace">
+      <span class="ss-topbar-logo-text">SynkSpace</span>
+    </div>
+    <div class="ss-topbar-badge">
+      <div class="ss-topbar-badge-dot"></div>
+      <span class="ss-topbar-badge-text">Waitlist Active</span>
+    </div>
   </div>
 
+  <!-- Hero -->
   <div class="ss-hero">
     <div class="ss-congrats">Congratulations</div>
-    <div class="ss-subtitle">You're In. Early Access <span>Confirmed</span></div>
+    <div class="ss-subtitle">
+      <span class="ss-sub-highlight">You're In.</span>&nbsp;
+      Early Access <span class="ss-sub-confirmed">Confirmed</span>
+    </div>
   </div>
 
+  <div class="ss-divider"></div>
+
+  <!-- Grid -->
   <div class="ss-grid">
 
-    <!-- LEFT -->
-    <div class="ss-left">
-      <h2>Unlock more by inviting people who'd love <em style="font-style:italic; background:linear-gradient(90deg,#3B82F6,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">SynkSpace</em></h2>
-      <p class="ss-left-sub">Invite friends who'd genuinely find this helpful — and unlock exclusive benefits along the way.</p>
+    <!-- LEFT CARD — Tiers -->
+    <div class="ss-card ss-card-left">
+      <div class="ss-card-title">
+        Unlock more by inviting people<br>who'd love <span class="ss-brand-name">SynkSpace</span>
+      </div>
+      <div class="ss-card-sub">Invite friends who'd genuinely find this helpful — and unlock exclusive benefits along the way.</div>
 
       <div class="ss-tiers">
         <div class="ss-tier">
-          <span class="ss-tier-count t1">3 invites</span>
-          <span class="ss-tier-reward">1 month <span class="ss-brand-italic">SynkSpace</span> <strong>Pro</strong></span>
+          <div class="ss-tier-left">
+            <div class="ss-tier-num-badge t1">3</div>
+            <span class="ss-tier-count t1">invites</span>
+          </div>
+          <div class="ss-tier-reward">
+            1 month <span class="ss-pro-badge">PRO</span>
+          </div>
         </div>
         <div class="ss-tier">
-          <span class="ss-tier-count t2">6 invites</span>
-          <span class="ss-tier-reward">3 months <span class="ss-brand-italic">SynkSpace</span> <strong>Pro</strong></span>
+          <div class="ss-tier-left">
+            <div class="ss-tier-num-badge t2">6</div>
+            <span class="ss-tier-count t2">invites</span>
+          </div>
+          <div class="ss-tier-reward">
+            3 months <span class="ss-pro-badge">PRO</span>
+          </div>
         </div>
         <div class="ss-tier">
-          <span class="ss-tier-count t3">10 invites</span>
-          <span class="ss-tier-reward"><strong style="color:#F97316;">Founder Seat 🏆</strong></span>
+          <div class="ss-tier-left">
+            <div class="ss-tier-num-badge t3">10</div>
+            <span class="ss-tier-count t3">invites</span>
+          </div>
+          <div class="ss-tier-reward">
+            <span class="ss-founder-badge">🏆 Founder Seat</span>
+          </div>
         </div>
       </div>
 
       <div class="ss-founder-note">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:2px"><path d="M7 1l1.5 4H13l-3.5 2.5 1.3 4L7 9 3.2 11.5 4.5 7.5 1 5h4.5z" fill="#64748B"/></svg>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px">
+          <path d="M7 1l1.5 4H13l-3.5 2.5 1.3 4L7 9 3.2 11.5 4.5 7.5 1 5h4.5z" fill="#6366F1"/>
+        </svg>
         <span>Lifetime <a href="#">Founder pricing</a>, early feature access, and a real voice in shaping SynkSpace.</span>
       </div>
     </div>
 
-    <!-- RIGHT -->
-    <div class="ss-right">
-      <div class="ss-right-title">Invite &amp; Earn</div>
-      <div class="ss-right-sub">Invite others. <strong>Unlock exclusive access</strong></div>
+    <!-- RIGHT CARD — Invite & Earn -->
+    <div class="ss-card ss-card-right">
+      <div class="ss-invite-title">Invite &amp; Earn</div>
+      <div class="ss-invite-sub">Invite others. <strong>Unlock exclusive access</strong></div>
 
-      <div class="ss-link-row">
-        <input class="ss-link-input" id="ssRefLink" type="text" readonly value="https://synkspace.in?ref=...">
+      <div class="ss-link-wrap">
+        <input class="ss-link-input" id="ssRefLink" type="text" readonly placeholder="https://synkspace.in?ref=...">
         <button class="ss-copy-btn" onclick="copySsRef(this)">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="4" width="9" height="9" rx="1.5" stroke="white" stroke-width="1.4"/><path d="M1 10V2a1 1 0 011-1h8" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <rect x="4" y="4" width="9" height="9" rx="1.5" stroke="white" stroke-width="1.4"/>
+            <path d="M1 10V2a1 1 0 011-1h8" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
           Copy
         </button>
       </div>
 
-      <div class="ss-or">or</div>
+      <div class="ss-or-row">or</div>
 
       <div class="ss-share-label">Share your invite link via</div>
       <div class="ss-share-icons">
         <!-- Instagram -->
-        <a class="ss-share-icon" id="ss-ig" href="#" target="_blank">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="4" stroke="white" stroke-width="1.5"/><circle cx="9" cy="9" r="3.5" stroke="white" stroke-width="1.5"/><circle cx="13" cy="5" r="1" fill="white"/></svg>
+        <a class="ss-share-icon" id="ss-ig" href="#" target="_blank" title="Instagram">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <rect x="2" y="2" width="14" height="14" rx="4" stroke="white" stroke-width="1.4"/>
+            <circle cx="9" cy="9" r="3.5" stroke="white" stroke-width="1.4"/>
+            <circle cx="13.2" cy="4.8" r="1" fill="white"/>
+          </svg>
         </a>
         <!-- WhatsApp -->
-        <a class="ss-share-icon" id="ss-wa" href="#" target="_blank">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="white" stroke-width="1.5"/><path d="M6 7.5c0 3 2.5 5 5 5l.5-1.5-1.5-.5c-.3.3-.8.8-1 .7C7.5 11 7 10.2 6.8 9.5c-.2-.5-.3-1 .2-1.5L6 7.5z" fill="white"/></svg>
+        <a class="ss-share-icon" id="ss-wa" href="#" target="_blank" title="WhatsApp">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M9 1.5A7.5 7.5 0 0116.5 9c0 4.14-3.36 7.5-7.5 7.5a7.47 7.47 0 01-3.75-1L1.5 16.5l1.05-3.15A7.47 7.47 0 011.5 9 7.5 7.5 0 019 1.5z" stroke="white" stroke-width="1.4"/>
+            <path d="M6.5 7.3c0 2.7 2.2 4.8 4.8 4.8l.6-1.4-1.4-.5c-.3.3-.7.7-.9.7C8.2 10.7 7.3 9.5 7.1 8.7c-.2-.5-.1-.9.3-1.1L6.5 7.3z" fill="white"/>
+          </svg>
         </a>
         <!-- Snapchat -->
-        <a class="ss-share-icon" id="ss-sc" href="#" target="_blank">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2C6.2 2 4.5 4 4.5 6.5c0 .8-.1 1.4-.5 1.7-.4.3-1.5.5-1.5 1 0 .4.5.6 1 .8.2.1.3.3.2.5-.2.6-.8 1.2-1.2 1.5 1 .3 2.2.5 3 1C6 14 7.2 16 9 16s3-2 3.5-2.5c.8-.5 2-.7 3-1-.4-.3-1-1-1.2-1.5-.1-.2 0-.4.2-.5.5-.2 1-.4 1-.8 0-.5-1.1-.7-1.5-1-.4-.3-.5-.9-.5-1.7C13.5 4 11.8 2 9 2z" stroke="white" stroke-width="1.5" fill="none"/></svg>
+        <a class="ss-share-icon" id="ss-sc" href="#" target="_blank" title="Snapchat">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M9 2C6.5 2 4.5 4 4.5 6.5c0 .9-.15 1.5-.5 1.8-.45.3-1.5.5-1.5 1 0 .4.5.65 1 .85.2.1.3.3.2.5-.2.6-.8 1.2-1.2 1.5 1 .3 2.2.5 3 1C6 14 7.2 16 9 16s3-2 3.5-2.5c.8-.5 2-.7 3-1-.4-.3-1-1-1.2-1.5-.1-.2 0-.4.2-.5.5-.2 1-.45 1-.85 0-.5-1.05-.7-1.5-1-.35-.3-.5-.9-.5-1.8C13.5 4 11.5 2 9 2z" stroke="white" stroke-width="1.4" fill="none"/>
+          </svg>
         </a>
         <!-- LinkedIn -->
-        <a class="ss-share-icon" id="ss-li" href="#" target="_blank">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="2.5" stroke="white" stroke-width="1.5"/><path d="M5.5 8v5M5.5 6v-.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/><path d="M8.5 13V10a2 2 0 014 0v3M8.5 8v1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <a class="ss-share-icon" id="ss-li" href="#" target="_blank" title="LinkedIn">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <rect x="2" y="2" width="14" height="14" rx="2.5" stroke="white" stroke-width="1.4"/>
+            <path d="M5.5 8v5M5.5 6v-.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M8.5 13V10a2 2 0 014 0v3M8.5 8.5V8" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
         </a>
         <!-- X / Twitter -->
-        <a class="ss-share-icon" id="ss-tw" href="#" target="_blank">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 2L9 7l4.5 7H11L8 9.5 4.5 14H2l4.5-7L2 2h2.5L8 6.5 11.5 2H13z" fill="white"/></svg>
+        <a class="ss-share-icon" id="ss-tw" href="#" target="_blank" title="X / Twitter">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
+            <path d="M12.6 1.5h2.3L9.9 7.2l5.9 7.8h-4.4l-3.5-4.6-4 4.6H1.6l5.4-6.1L1.3 1.5h4.5l3.2 4.2 3.6-4.2zm-.8 13.5h1.3L4.4 2.8H3l8.8 12.2z"/>
+          </svg>
         </a>
       </div>
 
       <!-- Progress bar -->
-      <div class="ss-progress-wrap">
+      <div class="ss-progress-section">
+        <div class="ss-progress-header">
+          <span class="ss-progress-label-text">Your Progress</span>
+          <span class="ss-progress-count" id="ssProgressCount">0 / 10 invites</span>
+        </div>
         <div class="ss-progress-track">
           <div class="ss-progress-fill" id="ssProgressFill"></div>
         </div>
         <div class="ss-milestones">
-          <span class="ss-milestone" id="ssM1">3 invites</span>
-          <span class="ss-milestone" id="ssM2">6 invites</span>
-          <span class="ss-milestone active" id="ssM3">10 invites</span>
+          <div class="ss-milestone">
+            <div class="ss-milestone-dot" id="ssDot1"></div>
+            <span class="ss-milestone-label" id="ssLabel1">3 invites</span>
+            <span class="ss-milestone-reward" id="ssReward1">1mo Pro</span>
+          </div>
+          <div class="ss-milestone">
+            <div class="ss-milestone-dot" id="ssDot2"></div>
+            <span class="ss-milestone-label" id="ssLabel2">6 invites</span>
+            <span class="ss-milestone-reward" id="ssReward2">3mo Pro</span>
+          </div>
+          <div class="ss-milestone">
+            <div class="ss-milestone-dot active" id="ssDot3"></div>
+            <span class="ss-milestone-label active" id="ssLabel3">10 invites</span>
+            <span class="ss-milestone-reward" id="ssReward3">Founder</span>
+          </div>
         </div>
       </div>
     </div>
@@ -2882,28 +3102,29 @@ async function submitForm(role) {
 function showSuccessScreen(refCode) {
   var link = refCode ? "https://synkspace.in?ref=" + refCode : "https://synkspace.in";
 
-  // Populate link fields
+  // Populate inputs
   document.getElementById("ssRefLink").value = link;
   document.getElementById("referLink").value = link;
 
   // Social share links
+  var msg = encodeURIComponent("Join me on SynkSpace — India's #1 Creator Marketplace! Get early access here: " + link);
   var enc = encodeURIComponent(link);
-  var msg = encodeURIComponent("Join me on SynkSpace — India's #1 Creator Marketplace! " + link);
   document.getElementById("ss-wa").href = "https://wa.me/?text=" + msg;
   document.getElementById("ss-tw").href = "https://twitter.com/intent/tweet?text=" + msg;
   document.getElementById("ss-li").href = "https://www.linkedin.com/sharing/share-offsite/?url=" + enc;
   document.getElementById("ss-ig").href = link;
   document.getElementById("ss-sc").href = link;
 
-  // Animate progress fill (0 referrals = 0%)
+  // Animate progress from 0
   setTimeout(function() {
     document.getElementById("ssProgressFill").style.width = "2%";
-  }, 400);
+  }, 600);
 
-  // Show the screen
+  // Show screen, lock scroll
   document.getElementById("success-screen").classList.add("show");
   document.getElementById("reg-overlay").classList.remove("open");
   document.body.style.overflow = "hidden";
+  window.scrollTo(0,0);
 }
 
 function closeSuccessScreen() {
