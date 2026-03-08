@@ -2046,6 +2046,13 @@ body {
 </div><!-- end page-wrapper -->
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// Capture referral code from URL
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var ref = params.get("ref");
+  if (ref) localStorage.setItem("synk_ref", ref);
+})();
+
 function toggleFaq(card) {
   const isOpen = card.classList.contains('open');
   document.querySelectorAll('.faq-card.open').forEach(c => c.classList.remove('open'));
@@ -2156,7 +2163,8 @@ async function submitForm(role) {
   const payload = {
     email: email,
     role: backendRole,
-    name: name || null
+    name: name || null,
+    referredBy: localStorage.getItem("synk_ref") || undefined,
   };
 
   btn.disabled = true;
@@ -2181,6 +2189,21 @@ async function submitForm(role) {
       throw new Error(result.message || "Server error");
     }
 
+    // Build referral link from response
+    const refCode = result.data?.referralCode;
+    const refLink = refCode ? "https://synkspace.in?ref=" + refCode : "";
+
+    // Update the refer section input
+    if (refLink) {
+      document.getElementById("referLink").value = refLink;
+    }
+
+    // Populate success referral input
+    setTimeout(function() {
+      var el = document.getElementById("successRefLink");
+      if (el && refLink) el.value = refLink;
+    }, 100);
+
     // Success UI
     panel.classList.remove("active");
     document.getElementById("reg-success").classList.add("show");
@@ -2197,6 +2220,14 @@ async function submitForm(role) {
     if (role === "brand") btn.textContent = "Join as Brand";
     if (role === "event") btn.textContent = "Join as Organiser";
   }
+}
+
+function copySuccessRef(btn) {
+  var val = document.getElementById("successRefLink").value;
+  navigator.clipboard.writeText(val).then(function() {
+    btn.textContent = "Copied!";
+    setTimeout(function() { btn.textContent = "Copy"; }, 2000);
+  });
 }
 
 (function() {
@@ -2552,4 +2583,16 @@ async function submitForm(role) {
           </svg>
         </div>
         <h3>You're on the list! 🎉</h3>
-        <p>Thanks for joining SynkSpace. We'll reach out to you<br>on WhatsApp / ema
+        <p>Thanks for joining SynkSpace. We'll reach out to you<br>on WhatsApp / email within 48 hours.</p>
+        <div style="margin-top:16px; background:#F8FAFC; border-radius:10px; padding:12px; text-align:left;">
+          <div style="font-size:11px; color:#94A3B8; font-weight:600; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">Your Referral Link</div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <input id="successRefLink" type="text" readonly style="flex:1; background:#fff; border:1px solid #E2E8F0; border-radius:8px; padding:8px 10px; font-size:12px; font-family:'Liberation Mono',monospace; color:#0F172A; outline:none;">
+            <button onclick="copySuccessRef(this)" style="background:#0F172A; color:#fff; border:none; border-radius:8px; padding:8px 14px; font-size:12px; font-weight:700; cursor:pointer; flex-shrink:0;">Copy</button>
+          </div>
+        </div>
+      </div>
+    </div><!-- end reg-modal -->
+</div><!-- end reg-overlay -->
+</body>
+</html>
