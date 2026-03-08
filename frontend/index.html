@@ -47,6 +47,13 @@ body {
   gap: 0.2px;
 }
 
+.nav-logo-img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
 .nav-logo-bg {
   display: none;
 }
@@ -1371,6 +1378,7 @@ body {
   /* Nav */
   .nav-container       { padding: 12px 20px; height: 60px; }
   .nav-logo-text       { font-size: 20px; }
+  .nav-logo-img        { width: 52px; height: 52px; }
 
   /* Hero — stack vertically */
   .header              { padding: 36px 0 52px; min-height: unset; }
@@ -1383,7 +1391,7 @@ body {
     min-height: unset;
     gap: 36px;
   }
-  .header-left         { max-width: 100%; width: 100%; text-align: center; align-items: center; display: flex; flex-direction: column; }
+  .header-left         { max-width: 100%; width: 100%; text-align: center; align-items: center; display: flex; flex-direction: column; order: 2; }
   .hero-badge-pill     { align-self: center; }
   .hero-h1 h1          { font-size: 38px; line-height: 46px; letter-spacing: -1px; text-align: center; }
   .hero-subtitle-wrap p{ font-size: 16px; max-width: 100%; text-align: center; }
@@ -1393,7 +1401,7 @@ body {
   .btn-creator, .btn-brand, .btn-event { height: 52px; padding: 12px 22px; }
   .b-text              { font-size: 15px; }
 
-  /* Hero illustration — carousel only, no floating cards */
+  /* Hero illustration — carousel on top, order:1 */
   .hero-illustration   {
     width: 100%;
     max-width: 440px;
@@ -1401,7 +1409,7 @@ body {
     height: auto !important;
     min-height: unset !important;
     align-self: center;
-    order: 2;
+    order: 1;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -1443,6 +1451,7 @@ body {
 @media (max-width: 480px) {
   /* Nav */
   .nav-container       { padding: 10px 16px; }
+  .nav-logo-img        { width: 44px; height: 44px; }
   .nav-cta-btn         { padding: 8px 14px; font-size: 13px; height: 36px; }
 
   /* Hero */
@@ -1740,7 +1749,7 @@ body {
 <nav class="nav">
   <div class="nav-container">
     <div class="nav-logo-wrap">
-<img src="assets/synkspace-logo.png" width="90" height="90" style="object-fit:contain;" alt="SynkSpace Logo">
+      <img src="assets/synkspace-logo.png" class="nav-logo-img" alt="SynkSpace Logo">
       <span class="nav-logo-text">SynkSpace</span>
     </div>
     <a href="#" class="nav-cta-btn" id="navCta" style="opacity:0;pointer-events:none;transition:opacity 0.3s ease;" onclick="event.preventDefault();openReg('creator')">Get Early Access</a>
