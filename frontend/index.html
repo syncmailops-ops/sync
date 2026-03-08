@@ -2237,7 +2237,7 @@ body {
 
       <div class="faq-bottom">
         <span class="faq-bottom-text">Still have questions?</span>
-        <a href="/cdn-cgi/l/email-protection#751c1b131a35060c1b1e06051416105b1c1b" class="faq-contact-btn">
+        <a href="#" class="faq-contact-btn" id="faqContactBtn" onclick="this.href='mai'+'lto:'+'info'+'@'+'synkspace'+'.in'; return true;">
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1" y="3" width="13" height="9" rx="1.5" stroke="#E2E8F0" stroke-width="1.4"/><path d="M1 4.5l6.5 4.5L14 4.5" stroke="#E2E8F0" stroke-width="1.4" stroke-linecap="round"/></svg>
           Contact Us
         </a>
@@ -2267,7 +2267,7 @@ body {
 
 </div><!-- end page-wrapper -->
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 function toggleFaq(card) {
   const isOpen = card.classList.contains('open');
   document.querySelectorAll('.faq-card.open').forEach(c => c.classList.remove('open'));
