@@ -775,61 +775,206 @@ body {
 /* ─── PLATFORM SUPERPOWERS ─── */
 .sp-section {
   display: flex; flex-direction: column; align-items: center;
-  padding: 80px 40px;
-  width: 100%;
-  box-sizing: border-box;
-  background: linear-gradient(180deg, #FFFFFF 0%, rgba(238,242,255,0.5) 100%);
+  padding: 96px 40px 100px;
+  width: 100%; box-sizing: border-box;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+  position: relative; overflow: hidden;
 }
+
 .sp-inner {
   display: flex; flex-direction: column; align-items: center;
-  gap: 48px; width: 100%; max-width: 1200px;
+  gap: 56px; width: 100%; max-width: 1200px;
+  position: relative; z-index: 1;
 }
-.sp-header { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
+
+/* Header */
+.sp-header {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 14px; width: 100%;
+}
+.sp-eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 14px;
+  background: rgba(99,102,241,0.07);
+  border: 1px solid rgba(99,102,241,0.18);
+  border-radius: 9999px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700; font-size: 11px;
+  letter-spacing: 1.4px; text-transform: uppercase;
+  color: #6366F1;
+}
 .sp-h2-row { display: flex; justify-content: center; width: 100%; }
 .sp-h2 {
-  font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 30px;
-  line-height: 36px; color: #0F172A; text-align: center;
+  font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 38px;
+  line-height: 46px; letter-spacing: -1px; color: #0F172A; text-align: center;
+}
+.sp-h2 .sp-grad {
+  background: linear-gradient(90deg, #3B82F6 0%, #8B5CF6 50%, #EC4899 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 .sp-sub-row { display: flex; justify-content: center; width: 100%; }
 .sp-sub {
   font-family: 'Manrope', sans-serif; font-weight: 400; font-size: 16px;
-  line-height: 24px; color: #64748B; text-align: center;
+  line-height: 26px; color: #64748B; text-align: center; max-width: 480px;
 }
-.sp-grid { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 
+/* Grid */
+.sp-grid {
+  width: 100%; display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* Base card — dark gradient cards on white page */
 .sp-card {
   box-sizing: border-box;
-  display: flex; flex-direction: row; align-items: flex-start;
-  padding: 24px; gap: 16px;
-  background: rgba(255,255,255,0.9);
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  box-shadow: 0px 4px 20px -2px rgba(15,23,42,0.06);
+  display: flex; flex-direction: column;
+  padding: 28px 26px 26px;
+  gap: 20px;
+  border-radius: 20px;
+  position: relative; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.07);
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.35s ease,
+              border-color 0.35s ease;
+  cursor: default;
 }
-.sp-c1,.sp-c2,.sp-c3,.sp-c4,.sp-c5,.sp-c6 {}
+.sp-card:hover {
+  transform: translateY(-6px) scale(1.01);
+}
 
+/* Shimmer sweep on hover */
+.sp-card::before {
+  content: '';
+  position: absolute; top: -60%; left: -80%;
+  width: 50%; height: 220%;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.055) 50%, transparent 60%);
+  transition: left 0.6s ease;
+  pointer-events: none; z-index: 1;
+}
+.sp-card:hover::before { left: 130%; }
+
+/* Decorative corner glow */
+.sp-card::after {
+  content: '';
+  position: absolute; top: -40px; right: -40px;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  opacity: 0.15;
+  pointer-events: none; z-index: 0;
+  transition: opacity 0.35s ease;
+}
+.sp-card:hover::after { opacity: 0.32; }
+
+/* Per-card gradient backgrounds — blue → purple → pink palette */
+.sp-c1 {
+  background: linear-gradient(145deg, #0d1f4a 0%, #1a2d6b 60%, #0f1a3d 100%);
+  box-shadow: 0 4px 24px rgba(37,99,235,0.18);
+}
+.sp-c1:hover { box-shadow: 0 20px 52px rgba(37,99,235,0.32); border-color: rgba(96,165,250,0.25); }
+.sp-c1::after { background: radial-gradient(circle, #60A5FA, transparent 70%); }
+
+.sp-c2 {
+  background: linear-gradient(145deg, #1a0d45 0%, #2d1875 60%, #150c38 100%);
+  box-shadow: 0 4px 24px rgba(109,40,217,0.18);
+}
+.sp-c2:hover { box-shadow: 0 20px 52px rgba(109,40,217,0.32); border-color: rgba(167,139,250,0.25); }
+.sp-c2::after { background: radial-gradient(circle, #A78BFA, transparent 70%); }
+
+.sp-c3 {
+  background: linear-gradient(145deg, #0f1635 0%, #1c2660 60%, #0b1228 100%);
+  box-shadow: 0 4px 24px rgba(59,130,246,0.15);
+}
+.sp-c3:hover { box-shadow: 0 20px 52px rgba(99,102,241,0.32); border-color: rgba(129,140,248,0.25); }
+.sp-c3::after { background: radial-gradient(circle, #818CF8, transparent 70%); }
+
+.sp-c4 {
+  background: linear-gradient(145deg, #2d0f45 0%, #4a1878 60%, #230c38 100%);
+  box-shadow: 0 4px 24px rgba(139,92,246,0.18);
+}
+.sp-c4:hover { box-shadow: 0 20px 52px rgba(139,92,246,0.32); border-color: rgba(192,132,252,0.25); }
+.sp-c4::after { background: radial-gradient(circle, #C084FC, transparent 70%); }
+
+.sp-c5 {
+  background: linear-gradient(145deg, #3d0d3a 0%, #681560 60%, #300b2e 100%);
+  box-shadow: 0 4px 24px rgba(192,38,130,0.18);
+}
+.sp-c5:hover { box-shadow: 0 20px 52px rgba(192,38,130,0.32); border-color: rgba(240,171,252,0.25); }
+.sp-c5::after { background: radial-gradient(circle, #E879F9, transparent 70%); }
+
+.sp-c6 {
+  background: linear-gradient(145deg, #450d2a 0%, #781540 60%, #380b22 100%);
+  box-shadow: 0 4px 24px rgba(219,39,119,0.18);
+}
+.sp-c6:hover { box-shadow: 0 20px 52px rgba(219,39,119,0.32); border-color: rgba(249,168,212,0.25); }
+.sp-c6::after { background: radial-gradient(circle, #F472B6, transparent 70%); }
+
+/* Icon box */
 .sp-icon {
   display: flex; justify-content: center; align-items: center;
   width: 48px; height: 48px; min-width: 48px;
-  box-shadow: 0px 1px 2px rgba(0,0,0,0.05);
-  border-radius: 12px; order: 1;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.14);
+  position: relative; z-index: 2;
+  transition: transform 0.3s ease, background 0.3s ease;
 }
-.sp-c1 .sp-icon { background: #EFF6FF; }
-.sp-c2 .sp-icon { background: #FAF5FF; }
-.sp-c3 .sp-icon { background: #F0FDF4; }
-.sp-c4 .sp-icon { background: #FFF7ED; }
-.sp-c5 .sp-icon { background: #FDF2F8; }
-.sp-c6 .sp-icon { background: #F0FDFA; }
+.sp-card:hover .sp-icon {
+  transform: scale(1.1);
+  background: rgba(255,255,255,0.18);
+}
 
-.sp-col { display: flex; flex-direction: column; gap: 6.75px; flex: 1; align-self: stretch; order: 2; z-index: 2; }
+/* Text */
+.sp-col {
+  display: flex; flex-direction: column; gap: 8px;
+  flex: 1; position: relative; z-index: 2;
+}
 .sp-title {
-  font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 17px;
-  line-height: 26px; color: #0F172A; display: flex; align-items: center;
+  font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 16px;
+  line-height: 24px; color: #FFFFFF;
 }
 .sp-desc {
   font-family: 'Manrope', sans-serif; font-weight: 400; font-size: 14px;
-  line-height: 23px; color: #64748B;
+  line-height: 22px; color: rgba(255,255,255,0.55);
 }
+
+/* Entrance animations — stagger each card */
+.sp-card { opacity: 0; transform: translateY(24px); }
+.sp-card.sp-visible {
+  animation: spFadeUp 0.55s cubic-bezier(0.25,0.46,0.45,0.94) forwards;
+}
+.sp-c1.sp-visible { animation-delay: 0.05s; }
+.sp-c2.sp-visible { animation-delay: 0.12s; }
+.sp-c3.sp-visible { animation-delay: 0.19s; }
+.sp-c4.sp-visible { animation-delay: 0.26s; }
+.sp-c5.sp-visible { animation-delay: 0.33s; }
+.sp-c6.sp-visible { animation-delay: 0.40s; }
+@keyframes spFadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 1280px) { .sp-section { padding: 80px 32px 88px; } }
+@media (max-width: 1024px) {
+  .sp-section { padding: 72px 24px 80px; }
+  .sp-grid    { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .sp-h2      { font-size: 32px; line-height: 40px; }
+}
+@media (max-width: 768px) {
+  .sp-section { padding: 64px 20px 72px; }
+  .sp-grid    { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .sp-h2      { font-size: 26px; line-height: 34px; }
+  .sp-sub     { font-size: 15px; }
+}
+@media (max-width: 480px) {
+  .sp-section { padding: 48px 16px 56px; }
+  .sp-grid    { grid-template-columns: 1fr; gap: 12px; }
+  .sp-h2      { font-size: 22px; line-height: 30px; }
+  .sp-title   { font-size: 15px; }
+  .sp-desc    { font-size: 13px; line-height: 20px; }
+}
+@media (max-width: 360px) { .sp-section { padding: 40px 12px; } }
 
 /* ─── FOOTER ─── */
 .footer-section {
@@ -1123,7 +1268,7 @@ body {
   .nav-container       { padding: 14px 32px; }
   .header-row          { padding: 0 32px; }
   /* How it works — handled inside component CSS */
-  .sp-section          { padding: 72px 32px; }
+  /* Superpowers — handled inside component CSS */
   .refer-section       { padding: 72px 32px; }
   .footer-section      { padding: 72px 32px; }
 }
@@ -1143,9 +1288,7 @@ body {
 
   /* How it works — handled inside component CSS */
 
-  /* Superpowers — 2 col */
-  .sp-section          { padding: 64px 24px; }
-  .sp-grid             { grid-template-columns: 1fr 1fr; gap: 18px; }
+  /* Superpowers — handled inside component CSS */
 
   /* Refer / Footer */
   .refer-section       { padding: 64px 24px; }
@@ -1190,11 +1333,7 @@ body {
 
   /* How it works — handled inside component CSS */
 
-  /* Superpowers */
-  .sp-section          { padding: 56px 20px; }
-  .sp-grid             { grid-template-columns: 1fr 1fr; gap: 14px; }
-  .sp-h2               { font-size: 26px; }
-  .sp-sub              { font-size: 15px; }
+  /* Superpowers — handled inside component CSS */
 
   /* Refer */
   .refer-section       { padding: 56px 20px; gap: 16px; }
@@ -1255,12 +1394,7 @@ body {
 
   /* How it works — handled inside component CSS */
 
-  /* Superpowers */
-  .sp-section          { padding: 48px 16px; }
-  .sp-grid             { grid-template-columns: 1fr; gap: 12px; }
-  .sp-h2               { font-size: 22px; line-height: 30px; }
-  .sp-title            { font-size: 16px; }
-  .sp-desc             { font-size: 13px; }
+  /* Superpowers — handled inside component CSS */
 
   /* Refer */
   .refer-section       { padding: 48px 16px; gap: 14px; }
@@ -1785,15 +1919,19 @@ body {
   <div class="sp-section">
     <div class="sp-inner">
       <div class="sp-header">
-        <div class="sp-h2-row"><h2 class="sp-h2">Platform Superpowers</h2></div>
-        <div class="sp-sub-row"><p class="sp-sub">Everything you need to scale your collaborations.</p></div>
+        <div class="sp-eyebrow">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1l1.2 2.5L9 4.1 6.8 6.3l.5 3L5 8l-2.3 1.3.5-3L1 4.1l2.8-.6z" stroke="#94A3B8" stroke-width="1.2" stroke-linejoin="round"/></svg>
+          Platform Superpowers
+        </div>
+        <div class="sp-h2-row"><h2 class="sp-h2">Everything you need to<br><span class="sp-grad">scale your collabs.</span></h2></div>
+        <div class="sp-sub-row"><p class="sp-sub">Built for creators, brands, and event organisers who are serious about growing together.</p></div>
       </div>
-      <div class="sp-grid">
+      <div class="sp-grid" id="spGrid">
 
-        <!-- SP 1 -->
+        <!-- SP 1 — Blue -->
         <div class="sp-card sp-c1">
           <div class="sp-icon">
-            <svg width="22" height="19" viewBox="0 0 22 19" fill="none"><circle cx="6" cy="9.5" r="4" stroke="#3B82F6" stroke-width="1.5"/><circle cx="16" cy="9.5" r="4" stroke="#3B82F6" stroke-width="1.5"/><path d="M10 9.5h2" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <svg width="22" height="20" viewBox="0 0 22 20" fill="none"><circle cx="6" cy="10" r="4" stroke="white" stroke-width="1.6"/><circle cx="16" cy="10" r="4" stroke="white" stroke-width="1.6"/><path d="M10 10h2" stroke="white" stroke-width="1.6" stroke-linecap="round"/><path d="M4 5.5C5.2 3.3 8 2 11 2s5.8 1.3 7 3.5" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/></svg>
           </div>
           <div class="sp-col">
             <div class="sp-title">AI-Powered Matching</div>
@@ -1801,58 +1939,58 @@ body {
           </div>
         </div>
 
-        <!-- SP 2 -->
+        <!-- SP 2 — Indigo -->
         <div class="sp-card sp-c2">
           <div class="sp-icon">
-            <svg width="19" height="22" viewBox="0 0 19 22" fill="none"><rect x="1" y="9" width="17" height="12" rx="2" stroke="#8B5CF6" stroke-width="1.5"/><path d="M4 9V6a5.5 5.5 0 0111 0v3" stroke="#8B5CF6" stroke-width="1.5"/><circle cx="9.5" cy="15" r="1.5" fill="#8B5CF6"/></svg>
+            <svg width="20" height="22" viewBox="0 0 20 22" fill="none"><rect x="1" y="9" width="18" height="12" rx="2.5" stroke="white" stroke-width="1.6"/><path d="M5 9V6.5a5 5 0 0110 0V9" stroke="white" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="15" r="1.8" fill="white"/></svg>
           </div>
           <div class="sp-col">
             <div class="sp-title">Secure Escrow Payments</div>
-            <div class="sp-desc">Funds are held safely and only released upon deliverable completion. Guaranteed trust.</div>
+            <div class="sp-desc">Funds are held safely and only released upon deliverable completion. Guaranteed trust on both sides.</div>
           </div>
         </div>
 
-        <!-- SP 3 -->
+        <!-- SP 3 — Blue-Indigo -->
         <div class="sp-card sp-c3">
           <div class="sp-icon">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><polyline points="1,14 4.5,8.5 7.5,11.5 11.5,4.5 17,8" stroke="#22C55E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 17h16" stroke="#22C55E" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <svg width="20" height="18" viewBox="0 0 20 18" fill="none"><polyline points="1,14 5,8 8,11 12,4 19,8" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 17h18" stroke="rgba(255,255,255,0.45)" stroke-width="1.4" stroke-linecap="round"/></svg>
           </div>
           <div class="sp-col">
             <div class="sp-title">Real-time Analytics</div>
-            <div class="sp-desc">Tracking engagement, clicks, and conversions across all platforms in a single dashboard.</div>
+            <div class="sp-desc">Track engagement, clicks, and conversions across all platforms in a unified dashboard.</div>
           </div>
         </div>
 
-        <!-- SP 4 -->
+        <!-- SP 4 — Purple -->
         <div class="sp-card sp-c4">
           <div class="sp-icon">
-            <svg width="16" height="20" viewBox="0 0 16 20" fill="none"><rect x="1" y="1" width="14" height="18" rx="2" stroke="#F97316" stroke-width="1.5"/><line x1="4" y1="7" x2="12" y2="7" stroke="#F97316" stroke-width="1.5" stroke-linecap="round"/><line x1="4" y1="11" x2="12" y2="11" stroke="#F97316" stroke-width="1.5" stroke-linecap="round"/><line x1="4" y1="15" x2="8" y2="15" stroke="#F97316" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <svg width="16" height="20" viewBox="0 0 16 20" fill="none"><rect x="1" y="1" width="14" height="18" rx="2.5" stroke="white" stroke-width="1.6"/><line x1="4" y1="7" x2="12" y2="7" stroke="white" stroke-width="1.5" stroke-linecap="round"/><line x1="4" y1="11" x2="12" y2="11" stroke="white" stroke-width="1.5" stroke-linecap="round"/><line x1="4" y1="15" x2="8" y2="15" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/></svg>
           </div>
           <div class="sp-col">
             <div class="sp-title">Standard Contracts</div>
-            <div class="sp-desc">Pre-vetted legal templates protecting IP rights and deliverables for both parties.</div>
+            <div class="sp-desc">Pre-vetted legal templates protecting IP rights and deliverables for both parties, no lawyer needed.</div>
           </div>
         </div>
 
-        <!-- SP 5 -->
+        <!-- SP 5 — Violet-Pink -->
         <div class="sp-card sp-c5">
           <div class="sp-icon">
-            <svg width="24" height="12" viewBox="0 0 24 12" fill="none"><circle cx="4" cy="6" r="3" stroke="#EC4899" stroke-width="1.5"/><circle cx="12" cy="6" r="3" stroke="#EC4899" stroke-width="1.5"/><circle cx="20" cy="6" r="3" stroke="#EC4899" stroke-width="1.5"/></svg>
+            <svg width="24" height="14" viewBox="0 0 24 14" fill="none"><circle cx="4" cy="7" r="3" stroke="white" stroke-width="1.6"/><circle cx="12" cy="7" r="3" stroke="white" stroke-width="1.6"/><circle cx="20" cy="7" r="3" stroke="white" stroke-width="1.6"/><path d="M7 7h2M15 7h2" stroke="rgba(255,255,255,0.4)" stroke-width="1.4" stroke-linecap="round"/></svg>
           </div>
           <div class="sp-col">
             <div class="sp-title">Community Events</div>
-            <div class="sp-desc">Exclusive access to creator meetups, brand launch parties, and networking events.</div>
+            <div class="sp-desc">Exclusive access to creator meetups, brand launch parties, and high-value networking events.</div>
           </div>
         </div>
 
-        <!-- SP 6 -->
+        <!-- SP 6 — Pink -->
         <div class="sp-card sp-c6">
           <div class="sp-icon">
-            <svg width="20" height="18" viewBox="0 0 20 18" fill="none"><path d="M4 9a6 6 0 0012 0A6 6 0 004 9z" stroke="#14B8A6" stroke-width="1.5"/><path d="M1.5 9a2.5 2.5 0 002.5 2.3V6.7A2.5 2.5 0 001.5 9z" fill="#14B8A6"/><path d="M18.5 9a2.5 2.5 0 01-2.5 2.3V6.7A2.5 2.5 0 0118.5 9z" fill="#14B8A6"/></svg>
+            <svg width="22" height="20" viewBox="0 0 22 20" fill="none"><path d="M11 18s-8-5.1-8-10a5 5 0 0110 0 5 5 0 0110 0c0 4.9-8 10-8 10h-4z" stroke="white" stroke-width="1.6" stroke-linejoin="round"/><path d="M11 8v4M9 10h4" stroke="rgba(255,255,255,0.5)" stroke-width="1.4" stroke-linecap="round"/></svg>
           </div>
           <div class="sp-col">
             <div class="sp-title">24/7 Dedicated Support</div>
-            <div class="sp-desc">Our support team is ready to help resolve disputes and assist with campaign management.</div>
+            <div class="sp-desc">Our support team is ready to help resolve disputes and assist with campaign management around the clock.</div>
           </div>
         </div>
 
@@ -1984,6 +2122,22 @@ function switchTab(el) {
   document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
 }
+
+// ── Platform Superpowers entrance animation ────────────────────────
+(function() {
+  function initSpObserver() {
+    const cards = document.querySelectorAll('.sp-card');
+    if (!cards.length) return;
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('sp-visible'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    cards.forEach(c => obs.observe(c));
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initSpObserver);
+  else initSpObserver();
+})();
 
 // ── Registration Modal ──────────────────────────────────────────────────────
 
