@@ -832,6 +832,7 @@ body {
   .how-card-title { font-size: 20px; }
   .how-card-body  { font-size: 14px; }
   .how-step-num   { font-size: 72px; }
+  .nav-logo-text { margin-left: 6px; }
 }
 
 /* ─── PLATFORM SUPERPOWERS ─── */
@@ -1064,69 +1065,9 @@ body {
 @media (max-width: 360px) { .sp-section { padding: 40px 12px; } }
 
 /* ─── FOOTER ─── */
-.footer-section {
-  display: flex; flex-direction: column; align-items: center;
-  padding: 80px 40px;
-  width: 100%; box-sizing: border-box;
-  background: #020617;
-}
-.footer-inner {
-  display: flex; flex-direction: column; align-items: center;
-  gap: 32px; width: 100%; max-width: 960px;
-}
-.footer-h2-wrap { display: flex; justify-content: center; width: 100%; }
-.footer-h2 {
-  font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 48px;
-  line-height: 48px; color: #FFFFFF; text-align: center;
-  display: flex; align-items: center; justify-content: center;
-}
-.footer-sub-wrap {
-  display: flex; flex-direction: column; align-items: center;
-  width: 100%; max-width: 640px;
-}
-.footer-sub {
-  font-family: 'Manrope', sans-serif; font-weight: 400; font-size: 18px;
-  line-height: 28px; color: #94A3B8; text-align: center;
-  width: 100%; display: flex; align-items: center; justify-content: center; text-align: center;
-}
-.footer-cta-block {
-  display: flex; flex-direction: column; align-items: center;
-  padding: 16px 0 48px; gap: 20px; width: 100%;
-}
-.footer-cta-btn {
-  display: flex; justify-content: center; align-items: center;
-  padding: 20px 48px;
-  height: 60px; min-width: 200px;
-  background: #FFFFFF; border-radius: 9999px;
-  box-shadow: 0px 25px 50px -12px rgba(0,0,0,0.25);
-  border: none; cursor: pointer; text-decoration: none;
-  font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 20px;
-  line-height: 28px; color: #0F172A; text-align: center;
-}
-.footer-invite {
-  font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 14px;
-  line-height: 20px; letter-spacing: 1.4px; text-transform: uppercase;
-  color: #64748B; text-align: center;
-}
-.footer-border-row {
-  box-sizing: border-box;
-  display: flex; flex-direction: row; justify-content: space-between; align-items: center;
-  padding: 32px 0 0; gap: 24px;
-  width: 100%; flex-wrap: wrap; justify-content: center;
-  border-top: 1px solid rgba(255,255,255,0.1);
-  align-self: stretch;
-}
-.footer-copy {
-  font-family: 'Manrope', sans-serif; font-weight: 400; font-size: 14px;
-  line-height: 20px; color: #64748B; width: 289.75px; display: flex; align-items: center;
-}
-.footer-links { display: flex; flex-direction: row; gap: 32px; }
-.footer-link {
-  font-family: 'Manrope', sans-serif; font-weight: 400; font-size: 14px;
-  line-height: 20px; color: #64748B; text-decoration: none;
-  display: flex; align-items: center;
-}
-.footer-link:hover { color: #94A3B8; }
+  <div style="width:100%; background:#020617; padding:24px 40px; box-sizing:border-box; display:flex; justify-content:center; align-items:center;">
+    <span style="font-family:'Manrope',sans-serif; font-weight:400; font-size:14px; color:#64748B;">© 2026 SynkSpace Pvt. Ltd., All rights reserved.</span>
+  </div>
 
 /* ═══════════════════════════════════════════════════
    REGISTRATION MODAL
@@ -1500,6 +1441,7 @@ body {
   .reg-header-title    { font-size: 18px; }
   .reg-role-tab        { font-size: 12px; padding: 6px 4px; gap: 4px; }
   .reg-input, .reg-select { height: 44px; font-size: 14px; }
+  .faq-bottom { flex-direction: column; align-items: center; gap: 10px; }
 }
 
 /* ─ Small mobile (≤360px) ─ */
