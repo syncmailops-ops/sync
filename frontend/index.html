@@ -1816,6 +1816,15 @@ body {
   .faq-a-inner { padding: 0 16px 18px 40px; }
   .faq-num     { display: none; }
 }
+
+/* ── WELCOME POPUP ── */
+@keyframes synkFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+@keyframes synkFadeIn { from{opacity:0} to{opacity:1} }
+@keyframes synkScaleIn { from{opacity:0;transform:scale(0.88)} to{opacity:1;transform:scale(1)} }
+@keyframes synkConfetti { 0%{transform:translateY(-10px) rotate(0deg);opacity:1} 100%{transform:translateY(110vh) rotate(720deg);opacity:0} }
+#welcomeOverlay { display:none; position:fixed; inset:0; z-index:99999; background:rgba(3,7,18,0.7); align-items:center; justify-content:center; padding:24px; box-sizing:border-box; overflow:hidden; }
+#welcomeOverlay.show { display:flex; animation:synkFadeIn 0.3s ease both; }
+#welcomeModal { animation:synkScaleIn 0.38s cubic-bezier(0.34,1.56,0.64,1) both; }
 </style>
 </head>
 <body>
@@ -2688,10 +2697,10 @@ async function submitForm(role) {
       throw new Error(result.message || "Server error");
     }
 
-    // Success UI — show full-screen congratulations
+    // Success UI — show welcome popup then congratulations screen
     var refCode = result.data && result.data.referralCode ? result.data.referralCode : null;
     panel.classList.remove("active");
-    showSuccessScreen(refCode);
+    showWelcomePopup(function() { showSuccessScreen(refCode); });
 
   } catch (err) {
 
@@ -3645,3 +3654,75 @@ function copySsRef(btn) {
     btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l4 4 6-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Copied!';
     setTimeout(function() {
       btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="4" width="9" height="9" rx="1.5" stroke="white" stroke-width="1.4"/><pat
+
+<!-- ── WELCOME POPUP ── -->
+<div id="welcomeOverlay">
+  <div id="welcomeConfetti" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"></div>
+  <div id="welcomeModal" style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;padding:36px 32px 28px;max-width:420px;width:100%;box-sizing:border-box;text-align:center;position:relative;z-index:1;">
+
+    <div style="width:62px;height:62px;background:#EFF6FF;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;animation:synkFloat 3s ease-in-out infinite;">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2C12 2 7 6 7 12c0 2.5 1 4.8 2.6 6.5L12 22l2.4-3.5C16 17 17 14.5 17 12c0-6-5-10-5-10z" fill="#3B82F6"/>
+        <circle cx="12" cy="11" r="2" fill="white"/>
+        <path d="M9 18.5S6 20 5 22h14c-1-2-4-3.5-4-3.5" fill="#93C5FD"/>
+        <path d="M7.5 12.5L5 15M16.5 12.5L19 15" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div style="display:inline-flex;align-items:center;gap:6px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:9999px;padding:4px 12px;margin-bottom:16px;">
+      <div style="width:6px;height:6px;border-radius:50%;background:#3B82F6;"></div>
+      <span style="font-size:12px;font-weight:500;color:#1D4ED8;letter-spacing:0.4px;font-family:'Manrope',sans-serif;">Early access confirmed</span>
+    </div>
+
+    <h2 style="font-size:20px;font-weight:700;color:#0F172A;margin:0 0 12px;line-height:1.35;font-family:'Manrope',sans-serif;">Welcome to the exclusive<br>SynkSpace waitlist</h2>
+
+    <p style="font-size:14px;color:#475569;line-height:1.75;margin:0 0 28px;font-family:'Manrope',sans-serif;">You're officially on the early access list for SynkSpace. We're building the future of intelligent collaboration and you'll be among the first to experience it.<br><br>Stay tuned — exciting updates are coming your way.</p>
+
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div onclick="closeWelcomePopup()" style="padding:13px 0;background:#3B82F6;border-radius:10px;color:#FFFFFF;font-size:15px;font-weight:600;cursor:pointer;text-align:center;font-family:'Manrope',sans-serif;">Got it</div>
+      <a href="https://instagram.com/synkspace" target="_blank" style="padding:13px 0;background:#FFFFFF;border-radius:10px;border:1.5px solid #CBD5E1;color:#334155;font-size:15px;font-weight:500;cursor:pointer;text-align:center;font-family:'Manrope',sans-serif;text-decoration:none;display:block;">Follow updates →</a>
+    </div>
+
+    <p style="font-size:12px;color:#94A3B8;margin:16px 0 0;font-family:'Manrope',sans-serif;">Click outside to dismiss</p>
+  </div>
+</div>
+
+<script>
+function showWelcomePopup(onClose) {
+  var overlay = document.getElementById('welcomeOverlay');
+  overlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+
+  var colors = ['#3B82F6','#8B5CF6','#EC4899','#60A5FA','#A78BFA','#FCA5A5'];
+  var container = document.getElementById('welcomeConfetti');
+  container.innerHTML = '';
+  for (var i = 0; i < 40; i++) {
+    var el = document.createElement('div');
+    el.style.cssText = 'position:absolute;left:'+Math.random()*100+'%;top:-10px;width:'+(5+Math.random()*5)+'px;height:'+(5+Math.random()*5)+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';border-radius:'+(Math.random()>0.5?'50%':'2px')+';animation:synkConfetti '+(1.8+Math.random()*2)+'s '+(Math.random()*1.4)+'s linear forwards;pointer-events:none;';
+    container.appendChild(el);
+  }
+
+  overlay.onclick = function(e) { if (e.target === overlay) closeWelcomePopup(onClose); };
+  document.getElementById('welcomeModal').querySelector('div').onclick = function() { closeWelcomePopup(onClose); };
+}
+
+function closeWelcomePopup(onClose) {
+  var overlay = document.getElementById('welcomeOverlay');
+  var modal = document.getElementById('welcomeModal');
+  modal.style.transition = 'opacity 0.2s,transform 0.2s';
+  modal.style.opacity = '0';
+  modal.style.transform = 'scale(0.92)';
+  overlay.style.transition = 'opacity 0.25s';
+  overlay.style.opacity = '0';
+  setTimeout(function() {
+    overlay.classList.remove('show');
+    overlay.style.opacity = '';
+    modal.style.opacity = '';
+    modal.style.transform = '';
+    document.body.style.overflow = '';
+    if (typeof onClose === 'function') onClose();
+  }, 280);
+}
+</script>
+</body>
+</html>
