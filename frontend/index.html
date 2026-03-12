@@ -1822,9 +1822,21 @@ body {
 @keyframes synkFadeIn { from{opacity:0} to{opacity:1} }
 @keyframes synkScaleIn { from{opacity:0;transform:scale(0.88)} to{opacity:1;transform:scale(1)} }
 @keyframes synkConfetti { 0%{transform:translateY(-10px) rotate(0deg);opacity:1} 100%{transform:translateY(110vh) rotate(720deg);opacity:0} }
-#welcomeOverlay { display:none; position:fixed; inset:0; z-index:99999; background:rgba(3,7,18,0.7); align-items:center; justify-content:center; padding:24px; box-sizing:border-box; overflow:hidden; }
+#welcomeOverlay {
+  display:none; position:fixed; inset:0; z-index:99999;
+  background: radial-gradient(ellipse 800px 600px at 80% -5%, rgba(99,102,241,0.35) 0%, transparent 60%),
+              radial-gradient(ellipse 600px 500px at -5% 90%, rgba(59,130,246,0.25) 0%, transparent 55%),
+              radial-gradient(ellipse 500px 400px at 50% 110%, rgba(236,72,153,0.2) 0%, transparent 55%),
+              rgba(3,7,18,0.88);
+  align-items:center; justify-content:center; padding:20px; box-sizing:border-box; overflow:hidden;
+}
 #welcomeOverlay.show { display:flex; animation:synkFadeIn 0.3s ease both; }
 #welcomeModal { animation:synkScaleIn 0.38s cubic-bezier(0.34,1.56,0.64,1) both; }
+@media(max-width:480px){
+  #welcomeModal { padding:28px 20px 22px !important; border-radius:16px !important; }
+  #welcomeModal h2 { font-size:17px !important; }
+  #welcomeModal p { font-size:13px !important; }
+}
 </style>
 </head>
 <body>
@@ -3658,20 +3670,20 @@ function copySsRef(btn) {
 <!-- ── WELCOME POPUP ── -->
 <div id="welcomeOverlay">
   <div id="welcomeConfetti" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"></div>
-  <div id="welcomeModal" style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;padding:36px 32px 28px;max-width:420px;width:100%;box-sizing:border-box;text-align:center;position:relative;z-index:1;">
+  <div id="welcomeModal" style="background:#FFFFFF;border:1px solid #E2E8F0;border-radius:20px;padding:36px 32px 28px;max-width:440px;width:100%;box-sizing:border-box;text-align:center;position:relative;z-index:1;">
 
-    <div style="width:62px;height:62px;background:#EFF6FF;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;animation:synkFloat 3s ease-in-out infinite;">
+    <div style="width:64px;height:64px;border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;animation:synkFloat 3s ease-in-out infinite;background:linear-gradient(135deg,#EFF6FF 0%,#EDE9FE 100%);border:1px solid rgba(99,102,241,0.15);">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-        <path d="M12 2C12 2 7 6 7 12c0 2.5 1 4.8 2.6 6.5L12 22l2.4-3.5C16 17 17 14.5 17 12c0-6-5-10-5-10z" fill="#3B82F6"/>
+        <path d="M12 2C12 2 7 6 7 12c0 2.5 1 4.8 2.6 6.5L12 22l2.4-3.5C16 17 17 14.5 17 12c0-6-5-10-5-10z" fill="#6366F1"/>
         <circle cx="12" cy="11" r="2" fill="white"/>
-        <path d="M9 18.5S6 20 5 22h14c-1-2-4-3.5-4-3.5" fill="#93C5FD"/>
-        <path d="M7.5 12.5L5 15M16.5 12.5L19 15" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M9 18.5S6 20 5 22h14c-1-2-4-3.5-4-3.5" fill="#A5B4FC"/>
+        <path d="M7.5 12.5L5 15M16.5 12.5L19 15" stroke="#6366F1" stroke-width="1.5" stroke-linecap="round"/>
       </svg>
     </div>
 
-    <div style="display:inline-flex;align-items:center;gap:6px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:9999px;padding:4px 12px;margin-bottom:16px;">
-      <div style="width:6px;height:6px;border-radius:50%;background:#3B82F6;"></div>
-      <span style="font-size:12px;font-weight:500;color:#1D4ED8;letter-spacing:0.4px;font-family:'Manrope',sans-serif;">Early access confirmed</span>
+    <div style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(90deg,#EEF2FF,#EDE9FE);border:1px solid #C7D2FE;border-radius:9999px;padding:5px 14px;margin-bottom:16px;">
+      <div style="width:6px;height:6px;border-radius:50%;background:linear-gradient(135deg,#6366F1,#8B5CF6);"></div>
+      <span style="font-size:12px;font-weight:600;color:#4338CA;letter-spacing:0.5px;font-family:'Manrope',sans-serif;">Early access confirmed</span>
     </div>
 
     <h2 style="font-size:20px;font-weight:700;color:#0F172A;margin:0 0 12px;line-height:1.35;font-family:'Manrope',sans-serif;">Welcome to the exclusive<br>SynkSpace waitlist</h2>
@@ -3679,8 +3691,17 @@ function copySsRef(btn) {
     <p style="font-size:14px;color:#475569;line-height:1.75;margin:0 0 28px;font-family:'Manrope',sans-serif;">You're officially on the early access list for SynkSpace. We're building the future of intelligent collaboration and you'll be among the first to experience it.<br><br>Stay tuned — exciting updates are coming your way.</p>
 
     <div style="display:flex;flex-direction:column;gap:10px;">
-      <div onclick="closeWelcomePopup()" style="padding:13px 0;background:#3B82F6;border-radius:10px;color:#FFFFFF;font-size:15px;font-weight:600;cursor:pointer;text-align:center;font-family:'Manrope',sans-serif;">Got it</div>
-      <a href="https://instagram.com/synkspace" target="_blank" style="padding:13px 0;background:#FFFFFF;border-radius:10px;border:1.5px solid #CBD5E1;color:#334155;font-size:15px;font-weight:500;cursor:pointer;text-align:center;font-family:'Manrope',sans-serif;text-decoration:none;display:block;">Follow updates →</a>
+      <div onclick="closeWelcomePopup()" style="padding:13px 0;background:linear-gradient(135deg,#3B82F6 0%,#6366F1 50%,#8B5CF6 100%);border-radius:10px;color:#FFFFFF;font-size:15px;font-weight:600;cursor:pointer;text-align:center;font-family:'Manrope',sans-serif;box-shadow:0 4px 14px rgba(99,102,241,0.3);">Got it</div>
+      <div style="display:flex;gap:8px;">
+        <div style="flex:1;padding:11px 0;background:linear-gradient(135deg,#FFF7FF,#FAF5FF);border-radius:10px;border:1.5px solid #E9D5FF;color:#7C3AED;font-size:13px;font-weight:600;cursor:pointer;text-align:center;font-family:'Manrope',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="6" stroke="#7C3AED" stroke-width="1.8"/><circle cx="12" cy="12" r="4" stroke="#7C3AED" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.2" fill="#7C3AED"/></svg>
+          Instagram
+        </div>
+        <div style="flex:1;padding:11px 0;background:linear-gradient(135deg,#EFF6FF,#F0F9FF);border-radius:10px;border:1.5px solid #BFDBFE;color:#1D4ED8;font-size:13px;font-weight:600;cursor:pointer;text-align:center;font-family:'Manrope',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="4" stroke="#1D4ED8" stroke-width="1.8"/><path d="M7 10v7M7 7v.5" stroke="#1D4ED8" stroke-width="1.8" stroke-linecap="round"/><path d="M11 17v-4a3 3 0 016 0v4M11 10v1" stroke="#1D4ED8" stroke-width="1.8" stroke-linecap="round"/></svg>
+          LinkedIn
+        </div>
+      </div>
     </div>
 
     <p style="font-size:12px;color:#94A3B8;margin:16px 0 0;font-family:'Manrope',sans-serif;">Click outside to dismiss</p>
