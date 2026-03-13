@@ -2746,6 +2746,44 @@ async function submitForm(role) {
   window.addEventListener('scroll', onScroll, { passive: true });
 })();
 
+
+
+function showWelcomePopup(onClose) {
+  var overlay = document.getElementById('welcomeOverlay');
+  overlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+
+  var colors = ['#3B82F6','#8B5CF6','#EC4899','#60A5FA','#A78BFA','#FCA5A5'];
+  var container = document.getElementById('welcomeConfetti');
+  container.innerHTML = '';
+  for (var i = 0; i < 40; i++) {
+    var el = document.createElement('div');
+    el.style.cssText = 'position:absolute;left:'+Math.random()*100+'%;top:-10px;width:'+(5+Math.random()*5)+'px;height:'+(5+Math.random()*5)+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';border-radius:'+(Math.random()>0.5?'50%':'2px')+';animation:synkConfetti '+(1.8+Math.random()*2)+'s '+(Math.random()*1.4)+'s linear forwards;pointer-events:none;';
+    container.appendChild(el);
+  }
+
+  overlay.onclick = function(e) { if (e.target === overlay) closeWelcomePopup(onClose); };
+  // close handled by overlay click and Got it button only
+}
+
+function closeWelcomePopup(onClose) {
+  var overlay = document.getElementById('welcomeOverlay');
+  var modal = document.getElementById('welcomeModal');
+  modal.style.transition = 'opacity 0.2s,transform 0.2s';
+  modal.style.opacity = '0';
+  modal.style.transform = 'scale(0.92)';
+  overlay.style.transition = 'opacity 0.25s';
+  overlay.style.opacity = '0';
+  setTimeout(function() {
+    overlay.classList.remove('show');
+    overlay.style.opacity = '';
+    modal.style.opacity = '';
+    modal.style.transform = '';
+    document.body.style.overflow = '';
+    if (typeof onClose === 'function') onClose();
+  }, 280);
+}
+
 </script>
 
 
@@ -3708,42 +3746,10 @@ function copySsRef(btn) {
   </div>
 </div>
 
-<script>
-function showWelcomePopup(onClose) {
-  var overlay = document.getElementById('welcomeOverlay');
-  overlay.classList.add('show');
-  document.body.style.overflow = 'hidden';
 
-  var colors = ['#3B82F6','#8B5CF6','#EC4899','#60A5FA','#A78BFA','#FCA5A5'];
-  var container = document.getElementById('welcomeConfetti');
-  container.innerHTML = '';
-  for (var i = 0; i < 40; i++) {
-    var el = document.createElement('div');
-    el.style.cssText = 'position:absolute;left:'+Math.random()*100+'%;top:-10px;width:'+(5+Math.random()*5)+'px;height:'+(5+Math.random()*5)+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';border-radius:'+(Math.random()>0.5?'50%':'2px')+';animation:synkConfetti '+(1.8+Math.random()*2)+'s '+(Math.random()*1.4)+'s linear forwards;pointer-events:none;';
-    container.appendChild(el);
-  }
+</body>
+</html>
 
-  overlay.onclick = function(e) { if (e.target === overlay) closeWelcomePopup(onClose); };
-  document.getElementById('welcomeModal').querySelector('div').onclick = function() { closeWelcomePopup(onClose); };
-}
 
-function closeWelcomePopup(onClose) {
-  var overlay = document.getElementById('welcomeOverlay');
-  var modal = document.getElementById('welcomeModal');
-  modal.style.transition = 'opacity 0.2s,transform 0.2s';
-  modal.style.opacity = '0';
-  modal.style.transform = 'scale(0.92)';
-  overlay.style.transition = 'opacity 0.25s';
-  overlay.style.opacity = '0';
-  setTimeout(function() {
-    overlay.classList.remove('show');
-    overlay.style.opacity = '';
-    modal.style.opacity = '';
-    modal.style.transform = '';
-    document.body.style.overflow = '';
-    if (typeof onClose === 'function') onClose();
-  }, 280);
-}
-</script>
 </body>
 </html>
