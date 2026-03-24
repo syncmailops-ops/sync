@@ -1136,56 +1136,59 @@ body {
 
   .hero-cards { display: none; }
 
-  /* HERO FIX */
+  /* HERO IMPROVEMENTS */
+
   .header {
-    min-height: 100dvh;
-    padding: 16px 0 32px;
+    padding: 12px 0 20px;
   }
-  
-  .header-content-wrap {
-    height: 100%;
-  }
-  
+
   .header-row {
-    min-height: calc(100dvh - 60px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  
-  .header-left {
-    width: 100%;
+    gap: 16px;
+    padding: 0 16px;
   }
 
   .hero-h1 h1 {
-    font-size: 34px;
-    line-height: 42px;
+    font-size: 30px;
+    line-height: 36px;
+  }
+
+  .hero-subtitle-wrap {
+    margin-bottom: 16px;
+  }
+
+  .hero-subtitle-wrap p {
+    font-size: 15px;
+    line-height: 22px;
   }
 
   .hero-buttons-row {
     width: 100%;
+    flex-direction: column;
   }
 
   .btn-creator {
     width: 100%;
-    justify-content: center;
+    height: 52px;
+  }
+
+  .hero-trust-row {
+    gap: 10px 14px;
   }
 
   /* HOW SECTION */
-  .how-section  { padding: 48px 16px 48px; }
 
-  .how-h2 { 
-    font-size: 24px; 
-    line-height: 32px; 
+  .how-section { padding: 48px 16px; }
+
+  .how-h2 {
+    font-size: 24px;
+    line-height: 32px;
   }
 
   .how-cards-row { display: none !important; }
 
   .how-timeline-wrap { display: flex; }
-  
 
 }
-
 /* ─── PLATFORM SUPERPOWERS ─── */
 .sp-section {
   display: flex; flex-direction: column; align-items: center;
