@@ -942,134 +942,130 @@ body {
   .how-card-title { font-size: 22px; line-height: 28px; }
 }
 /* ── How It Works: Scroll-Reveal Timeline (mobile only) ─────────── */
-.how-timeline-wrap {
-  display: none; /* hidden on desktop */
-  flex-direction: column;
+/* ── How It Works: Stacking Scroll Cards (mobile only) ─────────── */
+
+/* Outer tall scroll container — 3× card height gives scroll room per card */
+.how-stack-scroll {
+  display: none; /* desktop hidden */
   width: 100%;
-  padding: 4px 0 8px;
+  /* height set by JS to match 3 × sticky height */
   position: relative;
 }
 
-/* The vertical line running through all nodes */
-.how-tl-line {
-  position: absolute;
-  left: 19px;
-  top: 24px;
-  bottom: 24px;
-  width: 2px;
-  background: rgba(99,102,241,0.12);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.how-tl-line-fill {
+/* The sticky frame that pins while user scrolls through all cards */
+.how-stack-sticky {
+  position: sticky;
+  top: 72px; /* below nav */
   width: 100%;
-  height: 0%;
-  background: linear-gradient(180deg, #3B82F6, #8B5CF6, #EC4899);
-  border-radius: 2px;
-  transition: height 0.6s ease;
-}
-
-/* Each step row: node + card */
-.how-tl-item {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 24px;
-  position: relative;
-}
-.how-tl-item:last-child { margin-bottom: 0; }
-
-/* Circular node on the line */
-.how-tl-node {
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  position: relative;
+  height: calc(100svh - 72px - 48px); /* fill almost full viewport */
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 4px;
+  pointer-events: none;
 }
-.how-tl-node-ring {
+
+/* Progress dots — top-right corner */
+.how-stack-dots {
   position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: rgba(99,102,241,0.10);
-  border: 1.5px solid rgba(99,102,241,0.2);
-  transform: scale(0.5);
-  opacity: 0;
-  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1),
-              opacity 0.4s ease;
-}
-.how-tl-node-dot {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 16px rgba(59,130,246,0.35);
-  transform: scale(0.4);
-  opacity: 0;
-  transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1),
-              opacity 0.35s ease;
-  position: relative;
-  z-index: 1;
+  gap: 8px;
+  z-index: 20;
+  pointer-events: auto;
+}
+.how-sdot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  transition: all 0.35s ease;
+}
+.how-sdot.how-sdot-active {
+  width: 26px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.85);
 }
 
-/* Node color overrides per step */
-.how-tl-item[data-step="1"] .how-tl-node-dot {
-  background: linear-gradient(135deg, #7C3AED, #8B5CF6);
-  box-shadow: 0 4px 16px rgba(124,58,237,0.35);
-}
-.how-tl-item[data-step="2"] .how-tl-node-dot {
-  background: linear-gradient(135deg, #DB2777, #EC4899);
-  box-shadow: 0 4px 16px rgba(219,39,119,0.35);
-}
-
-/* Card — revealed on scroll */
-.how-tl-card {
-  flex: 1;
-  border-radius: 22px;
-  padding: 24px 22px 22px;
-  position: relative;
-  overflow: hidden;
+/* Base card */
+.how-scard {
+  position: absolute;
+  width: calc(100% - 32px);
+  max-width: 420px;
+  border-radius: 28px;
+  padding: 36px 28px 32px;
   box-sizing: border-box;
+  overflow: hidden;
+  pointer-events: auto;
+  /* default: hidden below screen, ready to slide up */
+  transform: translateY(108%) scale(0.94);
   opacity: 0;
-  transform: translateX(40px);
-  transition: opacity 0.5s ease,
-              transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+  transition: transform 0.52s cubic-bezier(0.32, 0.72, 0, 1),
+              opacity   0.38s ease,
+              scale     0.52s cubic-bezier(0.32, 0.72, 0, 1);
+  z-index: 1;
+  will-change: transform, opacity;
 }
-/* Card gradients matching desktop */
-.how-tl-c1 {
+
+/* Active card — fully visible, centred */
+.how-scard.how-scard-active {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  z-index: 10;
+}
+
+/* Card being pushed back (previous card peeking behind) */
+.how-scard.how-scard-behind {
+  transform: translateY(-6%) scale(0.93);
+  opacity: 0.45;
+  z-index: 5;
+}
+
+/* Card 2 steps back — barely visible */
+.how-scard.how-scard-behind2 {
+  transform: translateY(-11%) scale(0.87);
+  opacity: 0.18;
+  z-index: 2;
+}
+
+/* Card gradients */
+.how-sc1 {
   background: linear-gradient(145deg, #1e3a8a 0%, #2563eb 45%, #1d4ed8 100%);
   border: 1px solid rgba(147,197,253,0.25);
-  box-shadow: 0 16px 48px rgba(37,99,235,0.30);
+  box-shadow: 0 24px 64px rgba(37,99,235,0.40), 0 8px 24px rgba(0,0,0,0.15);
 }
-.how-tl-c2 {
+.how-sc2 {
   background: linear-gradient(145deg, #4c1d95 0%, #7c3aed 45%, #6d28d9 100%);
   border: 1px solid rgba(196,181,253,0.25);
-  box-shadow: 0 16px 48px rgba(124,58,237,0.30);
+  box-shadow: 0 24px 64px rgba(124,58,237,0.40), 0 8px 24px rgba(0,0,0,0.15);
 }
-.how-tl-c3 {
+.how-sc3 {
   background: linear-gradient(145deg, #831843 0%, #db2777 45%, #be185d 100%);
   border: 1px solid rgba(249,168,212,0.25);
-  box-shadow: 0 16px 48px rgba(219,39,119,0.30);
+  box-shadow: 0 24px 64px rgba(219,39,119,0.40), 0 8px 24px rgba(0,0,0,0.15);
 }
-/* Decorative blob inside card */
-.how-tl-card-blob {
-  position: absolute; width: 140px; height: 140px;
-  border-radius: 50%; right: -24px; top: -40px;
+
+/* Decorative blob */
+.how-scard-blob {
+  position: absolute;
+  width: 200px; height: 200px;
+  border-radius: 50%; right: -48px; top: -60px;
   opacity: 0.12; pointer-events: none;
 }
-.how-tl-c1 .how-tl-card-blob { background: radial-gradient(circle, #93C5FD, transparent 70%); }
-.how-tl-c2 .how-tl-card-blob { background: radial-gradient(circle, #C4B5FD, transparent 70%); }
-.how-tl-c3 .how-tl-card-blob { background: radial-gradient(circle, #F9A8D4, transparent 70%); }
+.how-sc1 .how-scard-blob { background: radial-gradient(circle, #93C5FD, transparent 70%); }
+.how-sc2 .how-scard-blob { background: radial-gradient(circle, #C4B5FD, transparent 70%); }
+.how-sc3 .how-scard-blob { background: radial-gradient(circle, #F9A8D4, transparent 70%); }
+
+/* Large ghost step number */
+.how-scard-num {
+  position: absolute; right: 24px; bottom: 16px;
+  font-family: 'Manrope', sans-serif; font-weight: 800;
+  font-size: 88px; line-height: 1; letter-spacing: -6px;
+  color: rgba(255,255,255,0.065); user-select: none; pointer-events: none;
+}
 
 /* Shimmer sweep */
-.how-tl-card::after {
+.how-scard::after {
   content: '';
   position: absolute; top: -60%; left: -60%;
   width: 55%; height: 220%;
@@ -1077,66 +1073,56 @@ body {
   animation: howShimmer 2.6s ease-in-out infinite;
   pointer-events: none;
 }
-.how-tl-c1::after { animation-delay: 0s; }
-.how-tl-c2::after { animation-delay: 0.9s; }
-.how-tl-c3::after { animation-delay: 1.8s; }
+.how-sc1::after { animation-delay: 0s; }
+.how-sc2::after { animation-delay: 0.9s; }
+.how-sc3::after { animation-delay: 1.8s; }
 
-.how-tl-step-label {
+/* Card text */
+.how-scard-step {
   font-family: 'Manrope', sans-serif; font-weight: 700;
-  font-size: 10px; letter-spacing: 1.8px; text-transform: uppercase;
-  color: rgba(255,255,255,0.45); margin-bottom: 8px;
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(255,255,255,0.45); margin-bottom: 16px;
   position: relative; z-index: 1;
 }
-.how-tl-title {
+.how-scard-icon {
+  width: 60px; height: 60px; border-radius: 18px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.20);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+  position: relative; z-index: 1;
+}
+.how-scard-title {
   font-family: 'Manrope', sans-serif; font-weight: 800;
-  font-size: 20px; line-height: 26px; letter-spacing: -0.3px;
-  color: #FFFFFF; margin-bottom: 10px;
+  font-size: 26px; line-height: 32px; letter-spacing: -0.4px;
+  color: #FFFFFF; margin-bottom: 14px;
   position: relative; z-index: 1;
 }
-.how-tl-body {
+.how-scard-body {
   font-family: 'Manrope', sans-serif; font-weight: 400;
-  font-size: 13px; line-height: 21px; color: rgba(255,255,255,0.65);
-  margin-bottom: 14px; position: relative; z-index: 1;
+  font-size: 15px; line-height: 24px; color: rgba(255,255,255,0.65);
+  margin-bottom: 20px; position: relative; z-index: 1;
 }
-.how-tl-tag-row {
-  display: flex; flex-wrap: wrap; gap: 6px;
+.how-scard-tags {
+  display: flex; flex-wrap: wrap; gap: 8px;
   position: relative; z-index: 1;
 }
-.how-tl-tag {
+.how-scard-tag {
   font-family: 'Manrope', sans-serif; font-weight: 600;
-  font-size: 11px; letter-spacing: 0.3px;
-  padding: 3px 10px; border-radius: 9999px;
+  font-size: 12px; letter-spacing: 0.3px;
+  padding: 4px 12px; border-radius: 9999px;
   background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.18);
-  color: rgba(255,255,255,0.70);
+  border: 1px solid rgba(255,255,255,0.20);
+  color: rgba(255,255,255,0.75);
 }
-
-/* ── "revealed" state triggered by IntersectionObserver ── */
-.how-tl-item.tl-revealed .how-tl-node-dot {
-  transform: scale(1);
-  opacity: 1;
-}
-.how-tl-item.tl-revealed .how-tl-node-ring {
-  transform: scale(1.18);
-  opacity: 1;
-}
-.how-tl-item.tl-revealed .how-tl-card {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* stagger node vs card slightly */
-.how-tl-item.tl-revealed .how-tl-node-dot   { transition-delay: 0s; }
-.how-tl-item.tl-revealed .how-tl-node-ring  { transition-delay: 0.08s; }
-.how-tl-item.tl-revealed .how-tl-card       { transition-delay: 0.12s; }
 
 @media (max-width: 480px) {
   .nav-logo-text { margin-left: 2px; }
   .hero-cards { display: none; }
-  .how-section  { padding: 48px 16px 48px; }
+  .how-section  { padding: 48px 0 0; }
   .how-h2       { font-size: 24px; line-height: 32px; }
   .how-cards-row { display: none !important; }
-  .how-timeline-wrap { display: flex; }
+  .how-stack-scroll { display: block; }
   .faq-bottom { flex-direction: column; }
 }
 
@@ -2410,73 +2396,67 @@ body {
 
     </div>
 
-    <!-- Mobile scroll-reveal vertical timeline — How It Works -->
-    <div class="how-timeline-wrap" id="howTimeline">
-      <!-- Vertical progress line -->
-      <div class="how-tl-line">
-        <div class="how-tl-line-fill" id="howTlFill"></div>
-      </div>
+    <!-- Mobile stacking scroll cards — How It Works -->
+    <div class="how-stack-scroll" id="howStackScroll">
+      <!-- Sticky viewport that stays pinned while user scrolls through 3 steps -->
+      <div class="how-stack-sticky" id="howStackSticky">
 
-      <!-- Step 1 -->
-      <div class="how-tl-item" data-step="0">
-        <div class="how-tl-node">
-          <div class="how-tl-node-ring"></div>
-          <div class="how-tl-node-dot">
-            <svg width="14" height="14" viewBox="0 0 30 30" fill="none"><circle cx="12" cy="12" r="8" stroke="white" stroke-width="2.5"/><path d="M18 18L26 26" stroke="white" stroke-width="2.8" stroke-linecap="round"/></svg>
-          </div>
+        <!-- Progress dots -->
+        <div class="how-stack-dots">
+          <div class="how-sdot how-sdot-active" data-dot="0"></div>
+          <div class="how-sdot" data-dot="1"></div>
+          <div class="how-sdot" data-dot="2"></div>
         </div>
-        <div class="how-tl-card how-tl-c1">
-          <div class="how-tl-card-blob"></div>
-          <div class="how-tl-step-label">Step 01</div>
-          <div class="how-tl-title">Discover &amp; Match</div>
-          <div class="how-tl-body">Use our AI-powered search to instantly find the perfect creators or brands — filtered by niche, follower count, budget, and real engagement quality.</div>
-          <div class="how-tl-tag-row">
-            <span class="how-tl-tag">AI Search</span>
-            <span class="how-tl-tag">Smart Filters</span>
-          </div>
-        </div>
-      </div>
 
-      <!-- Step 2 -->
-      <div class="how-tl-item" data-step="1">
-        <div class="how-tl-node">
-          <div class="how-tl-node-ring"></div>
-          <div class="how-tl-node-dot">
-            <svg width="14" height="14" viewBox="0 0 30 30" fill="none"><rect x="3" y="13" width="24" height="14" rx="3" stroke="white" stroke-width="2.5"/><path d="M8 13V10a7 7 0 0114 0v3" stroke="white" stroke-width="2.5"/><circle cx="15" cy="20" r="2.5" fill="white"/></svg>
+        <!-- Card 1 — Blue -->
+        <div class="how-scard how-sc1 how-scard-active" data-card="0">
+          <div class="how-scard-blob"></div>
+          <div class="how-scard-step">Step 01</div>
+          <div class="how-scard-icon">
+            <svg width="28" height="28" viewBox="0 0 30 30" fill="none"><circle cx="12" cy="12" r="8" stroke="white" stroke-width="2.2"/><path d="M18 18L26 26" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
           </div>
-        </div>
-        <div class="how-tl-card how-tl-c2">
-          <div class="how-tl-card-blob"></div>
-          <div class="how-tl-step-label">Step 02</div>
-          <div class="how-tl-title">Collaborate Securely</div>
-          <div class="how-tl-body">Negotiate terms, sign legally-vetted digital contracts, and manage every deliverable in a real-time shared dashboard. Full transparency, zero middlemen.</div>
-          <div class="how-tl-tag-row">
-            <span class="how-tl-tag">Digital Contracts</span>
-            <span class="how-tl-tag">Live Dashboard</span>
+          <div class="how-scard-title">Discover &amp; Match</div>
+          <div class="how-scard-body">Use our AI-powered search to instantly find the perfect creators or brands — filtered by niche, follower count, budget, and real engagement quality.</div>
+          <div class="how-scard-tags">
+            <span class="how-scard-tag">AI Search</span>
+            <span class="how-scard-tag">Smart Filters</span>
           </div>
+          <div class="how-scard-num">01</div>
         </div>
-      </div>
 
-      <!-- Step 3 -->
-      <div class="how-tl-item" data-step="2">
-        <div class="how-tl-node">
-          <div class="how-tl-node-ring"></div>
-          <div class="how-tl-node-dot">
-            <svg width="14" height="14" viewBox="0 0 30 30" fill="none"><path d="M4 22L10 14L15 19L22 7" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 7h4v4" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <!-- Card 2 — Purple -->
+        <div class="how-scard how-sc2" data-card="1">
+          <div class="how-scard-blob"></div>
+          <div class="how-scard-step">Step 02</div>
+          <div class="how-scard-icon">
+            <svg width="28" height="28" viewBox="0 0 30 30" fill="none"><rect x="3" y="13" width="24" height="14" rx="3" stroke="white" stroke-width="2.2"/><path d="M8 13V10a7 7 0 0114 0v3" stroke="white" stroke-width="2.2"/><circle cx="15" cy="20" r="2.5" fill="white"/></svg>
           </div>
-        </div>
-        <div class="how-tl-card how-tl-c3">
-          <div class="how-tl-card-blob"></div>
-          <div class="how-tl-step-label">Step 03</div>
-          <div class="how-tl-title">Pay &amp; Grow</div>
-          <div class="how-tl-body">Funds held in secure escrow, released only upon approval. Track performance analytics across platforms and build long-term partnerships that compound over time.</div>
-          <div class="how-tl-tag-row">
-            <span class="how-tl-tag">Escrow</span>
-            <span class="how-tl-tag">Analytics</span>
+          <div class="how-scard-title">Collaborate Securely</div>
+          <div class="how-scard-body">Negotiate terms, sign legally-vetted digital contracts, and manage every deliverable in a real-time shared dashboard. Full transparency, zero middlemen.</div>
+          <div class="how-scard-tags">
+            <span class="how-scard-tag">Digital Contracts</span>
+            <span class="how-scard-tag">Live Dashboard</span>
           </div>
+          <div class="how-scard-num">02</div>
         </div>
-      </div>
 
+        <!-- Card 3 — Pink -->
+        <div class="how-scard how-sc3" data-card="2">
+          <div class="how-scard-blob"></div>
+          <div class="how-scard-step">Step 03</div>
+          <div class="how-scard-icon">
+            <svg width="28" height="28" viewBox="0 0 30 30" fill="none"><path d="M4 22L10 14L15 19L22 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 7h4v4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="how-scard-title">Pay &amp; Grow</div>
+          <div class="how-scard-body">Funds held in secure escrow, released only upon approval. Track performance analytics and build long-term partnerships that compound over time.</div>
+          <div class="how-scard-tags">
+            <span class="how-scard-tag">Escrow</span>
+            <span class="how-scard-tag">Analytics</span>
+          </div>
+          <div class="how-scard-num">03</div>
+        </div>
+
+      </div>
     </div>
 
   </div>
@@ -2782,57 +2762,72 @@ function switchTab(el) {
   else initSpObserver();
 })();
 
-// ── How It Works: Scroll-Reveal Timeline (mobile) ─────────────────
+// ── How It Works: Stacking Scroll Cards (mobile) ──────────────────
 (function() {
-  function initHowTimeline() {
-    var items = document.querySelectorAll('.how-tl-item');
-    var fill  = document.getElementById('howTlFill');
-    if (!items.length) return;
-
-    // Only active on mobile (<=480px)
+  function initHowStack() {
     if (window.innerWidth > 480) return;
 
-    var revealed = 0;
-    var total = items.length;
+    var scrollWrap = document.getElementById('howStackScroll');
+    var sticky     = document.getElementById('howStackSticky');
+    var cards      = Array.from(document.querySelectorAll('.how-scard'));
+    var dots       = Array.from(document.querySelectorAll('.how-sdot'));
+    if (!scrollWrap || !sticky || !cards.length) return;
 
-    function updateLine() {
-      if (!fill) return;
-      // progress = fraction of steps revealed
-      var pct = total > 1 ? (revealed / (total - 1)) * 100 : (revealed > 0 ? 100 : 0);
-      fill.style.height = Math.min(pct, 100) + '%';
+    var n = cards.length;
+    var current = 0;
+
+    // Make the scroll container tall enough: one sticky-height per card
+    function setSizes() {
+      var stickyH = sticky.offsetHeight;
+      // Each card gets its own "scroll step" of 80% viewport
+      scrollWrap.style.height = (stickyH + (n * window.innerHeight * 0.75)) + 'px';
+    }
+    setSizes();
+    window.addEventListener('resize', setSizes);
+
+    // Set initial state: card 0 active, rest hidden below
+    function applyStates(idx) {
+      cards.forEach(function(card, i) {
+        card.classList.remove('how-scard-active', 'how-scard-behind', 'how-scard-behind2');
+        var rel = i - idx; // relative position to active
+        if (rel === 0)       card.classList.add('how-scard-active');
+        else if (rel === -1) card.classList.add('how-scard-behind');
+        else if (rel === -2) card.classList.add('how-scard-behind2');
+        // rel < -2 or rel > 0: stays invisible (default translateY(108%))
+      });
+      dots.forEach(function(d, i) {
+        d.classList.toggle('how-sdot-active', i === idx);
+      });
+    }
+    applyStates(0);
+
+    // Drive via scroll position
+    function onScroll() {
+      var rect = scrollWrap.getBoundingClientRect();
+      // How far we've scrolled into the container (0 → full container height)
+      var scrolled = -rect.top;
+      if (scrolled < 0) scrolled = 0;
+
+      var stickyH = sticky.offsetHeight;
+      var stepSize = window.innerHeight * 0.75;
+
+      // Which card should be active
+      var idx = Math.floor(scrolled / stepSize);
+      if (idx < 0) idx = 0;
+      if (idx >= n) idx = n - 1;
+
+      if (idx !== current) {
+        current = idx;
+        applyStates(current);
+      }
     }
 
-    items.forEach(function(item, idx) {
-      var obs = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) {
-          if (e.isIntersecting) {
-            if (!item.classList.contains('tl-revealed')) {
-              item.classList.add('tl-revealed');
-              revealed = Math.max(revealed, idx + 1);
-              updateLine();
-            }
-          } else {
-            if (item.classList.contains('tl-revealed')) {
-              item.classList.remove('tl-revealed');
-              // Recount based on remaining revealed items
-              revealed = 0;
-              items.forEach(function(it, i) {
-                if (it.classList.contains('tl-revealed')) revealed = Math.max(revealed, i + 1);
-              });
-              updateLine();
-            }
-          }
-        });
-      }, {
-        threshold: 0.25,
-        rootMargin: '0px 0px -40px 0px'
-      });
-      obs.observe(item);
-    });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll(); // init
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initHowTimeline);
-  else initHowTimeline();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initHowStack);
+  else initHowStack();
 })();
 (function() {
   function initRevo(sceneId, dotsId) {
