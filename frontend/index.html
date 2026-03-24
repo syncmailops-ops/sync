@@ -1879,6 +1879,42 @@ body {
 @media(max-width:480px){
   #welcomeModal { padding:26px 16px 22px !important; border-radius:16px !important; }
 }
+
+/* ── How It Works: mobile scroll-triggered slide-up + number pop ── */
+@media (max-width: 480px) {
+  .how-revo .mob-revo-card {
+    opacity: 0;
+    transform: translateX(-50%) translateY(52px) scale(0.96);
+    transition: opacity 0.55s cubic-bezier(0.25,0.46,0.45,0.94),
+                transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94);
+  }
+  .how-revo .mob-revo-card.revo-active,
+  .how-revo .mob-revo-card.revo-next,
+  .how-revo .mob-revo-card.revo-next2 {
+    /* revo states handle opacity/transform — let hiw-revealed override first */
+  }
+  .how-revo .mob-revo-card.hiw-revealed {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0px) scale(1);
+  }
+  .how-revo .mob-revo-card.revo-next.hiw-revealed {
+    opacity: 0.55;
+    transform: translateX(-50%) scale(0.90) translateY(20px);
+  }
+  .how-revo .mob-revo-card.revo-next2.hiw-revealed {
+    opacity: 0.25;
+    transform: translateX(-50%) scale(0.80) translateY(38px);
+  }
+  /* Step number pop — fires after card settles */
+  .how-revo .mob-revo-card.hiw-revealed .mob-revo-title {
+    animation: howNumPop 0.45s cubic-bezier(0.34,1.56,0.64,1) 0.5s both;
+  }
+  @keyframes howNumPop {
+    0%   { transform: scale(1) translateY(4px); opacity: 0.6; }
+    60%  { transform: scale(1.06) translateY(0px); opacity: 1; }
+    100% { transform: scale(1) translateY(0px); opacity: 1; }
+  }
+}
 </style>
 </head>
 <body>
@@ -2545,6 +2581,49 @@ function switchTab(el) {
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initSpObserver);
   else initSpObserver();
+})();
+
+// ── How It Works: mobile scroll-triggered slide-up animation ──────────────
+(function() {
+  function initHowAnim() {
+    if (window.innerWidth > 480) return;
+    var wrap = document.getElementById('howRevo');
+    if (!wrap) return;
+
+    var cards = Array.from(wrap.querySelectorAll('.mob-revo-card'));
+    if (!cards.length) return;
+
+    var fired = false;
+
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting && !fired) {
+          fired = true;
+          cards.forEach(function(card, i) {
+            setTimeout(function() {
+              card.classList.add('hiw-revealed');
+            }, i * 160);
+          });
+          obs.disconnect();
+        }
+      });
+    }, { threshold: 0.18 });
+
+    obs.observe(wrap);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initHowAnim);
+  else initHowAnim();
+
+  // Re-check on resize in case orientation changes
+  window.addEventListener('resize', function() {
+    var wrap = document.getElementById('howRevo');
+    if (!wrap) return;
+    if (window.innerWidth <= 480) {
+      var cards = Array.from(wrap.querySelectorAll('.mob-revo-card'));
+      cards.forEach(function(c) { c.classList.add('hiw-revealed'); });
+    }
+  });
 })();
 
 // ── Stacked Card Carousel Engine ───────────────────────────────────────────
