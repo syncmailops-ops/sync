@@ -1139,14 +1139,20 @@ body {
   /* HERO FIX */
   .header {
     min-height: 100dvh;
-    padding: 20px 0 32px;
+    padding: 16px 0 32px;
   }
-
-  .header-row {
+  
+  .header-content-wrap {
     height: 100%;
+  }
+  
+  .header-row {
+    min-height: calc(100dvh - 60px);
+    display: flex;
+    flex-direction: column;
     justify-content: center;
   }
-
+  
   .header-left {
     width: 100%;
   }
@@ -1176,6 +1182,7 @@ body {
   .how-cards-row { display: none !important; }
 
   .how-timeline-wrap { display: flex; }
+  
 
 }
 
