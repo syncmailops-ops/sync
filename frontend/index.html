@@ -941,13 +941,202 @@ body {
   .how-card     { flex: 1 1 100%; max-width: 100%; padding: 32px 28px; }
   .how-card-title { font-size: 22px; line-height: 28px; }
 }
+/* ── How It Works: Scroll-Reveal Timeline (mobile only) ─────────── */
+.how-timeline-wrap {
+  display: none; /* hidden on desktop */
+  flex-direction: column;
+  width: 100%;
+  padding: 4px 0 8px;
+  position: relative;
+}
+
+/* The vertical line running through all nodes */
+.how-tl-line {
+  position: absolute;
+  left: 19px;
+  top: 24px;
+  bottom: 24px;
+  width: 2px;
+  background: rgba(99,102,241,0.12);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.how-tl-line-fill {
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(180deg, #3B82F6, #8B5CF6, #EC4899);
+  border-radius: 2px;
+  transition: height 0.6s ease;
+}
+
+/* Each step row: node + card */
+.how-tl-item {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+  position: relative;
+}
+.how-tl-item:last-child { margin-bottom: 0; }
+
+/* Circular node on the line */
+.how-tl-node {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px;
+}
+.how-tl-node-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(99,102,241,0.10);
+  border: 1.5px solid rgba(99,102,241,0.2);
+  transform: scale(0.5);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1),
+              opacity 0.4s ease;
+}
+.how-tl-node-dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(59,130,246,0.35);
+  transform: scale(0.4);
+  opacity: 0;
+  transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1),
+              opacity 0.35s ease;
+  position: relative;
+  z-index: 1;
+}
+
+/* Node color overrides per step */
+.how-tl-item[data-step="1"] .how-tl-node-dot {
+  background: linear-gradient(135deg, #7C3AED, #8B5CF6);
+  box-shadow: 0 4px 16px rgba(124,58,237,0.35);
+}
+.how-tl-item[data-step="2"] .how-tl-node-dot {
+  background: linear-gradient(135deg, #DB2777, #EC4899);
+  box-shadow: 0 4px 16px rgba(219,39,119,0.35);
+}
+
+/* Card — revealed on scroll */
+.how-tl-card {
+  flex: 1;
+  border-radius: 22px;
+  padding: 24px 22px 22px;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.5s ease,
+              transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+/* Card gradients matching desktop */
+.how-tl-c1 {
+  background: linear-gradient(145deg, #1e3a8a 0%, #2563eb 45%, #1d4ed8 100%);
+  border: 1px solid rgba(147,197,253,0.25);
+  box-shadow: 0 16px 48px rgba(37,99,235,0.30);
+}
+.how-tl-c2 {
+  background: linear-gradient(145deg, #4c1d95 0%, #7c3aed 45%, #6d28d9 100%);
+  border: 1px solid rgba(196,181,253,0.25);
+  box-shadow: 0 16px 48px rgba(124,58,237,0.30);
+}
+.how-tl-c3 {
+  background: linear-gradient(145deg, #831843 0%, #db2777 45%, #be185d 100%);
+  border: 1px solid rgba(249,168,212,0.25);
+  box-shadow: 0 16px 48px rgba(219,39,119,0.30);
+}
+/* Decorative blob inside card */
+.how-tl-card-blob {
+  position: absolute; width: 140px; height: 140px;
+  border-radius: 50%; right: -24px; top: -40px;
+  opacity: 0.12; pointer-events: none;
+}
+.how-tl-c1 .how-tl-card-blob { background: radial-gradient(circle, #93C5FD, transparent 70%); }
+.how-tl-c2 .how-tl-card-blob { background: radial-gradient(circle, #C4B5FD, transparent 70%); }
+.how-tl-c3 .how-tl-card-blob { background: radial-gradient(circle, #F9A8D4, transparent 70%); }
+
+/* Shimmer sweep */
+.how-tl-card::after {
+  content: '';
+  position: absolute; top: -60%; left: -60%;
+  width: 55%; height: 220%;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.07) 50%, transparent 60%);
+  animation: howShimmer 2.6s ease-in-out infinite;
+  pointer-events: none;
+}
+.how-tl-c1::after { animation-delay: 0s; }
+.how-tl-c2::after { animation-delay: 0.9s; }
+.how-tl-c3::after { animation-delay: 1.8s; }
+
+.how-tl-step-label {
+  font-family: 'Manrope', sans-serif; font-weight: 700;
+  font-size: 10px; letter-spacing: 1.8px; text-transform: uppercase;
+  color: rgba(255,255,255,0.45); margin-bottom: 8px;
+  position: relative; z-index: 1;
+}
+.how-tl-title {
+  font-family: 'Manrope', sans-serif; font-weight: 800;
+  font-size: 20px; line-height: 26px; letter-spacing: -0.3px;
+  color: #FFFFFF; margin-bottom: 10px;
+  position: relative; z-index: 1;
+}
+.how-tl-body {
+  font-family: 'Manrope', sans-serif; font-weight: 400;
+  font-size: 13px; line-height: 21px; color: rgba(255,255,255,0.65);
+  margin-bottom: 14px; position: relative; z-index: 1;
+}
+.how-tl-tag-row {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  position: relative; z-index: 1;
+}
+.how-tl-tag {
+  font-family: 'Manrope', sans-serif; font-weight: 600;
+  font-size: 11px; letter-spacing: 0.3px;
+  padding: 3px 10px; border-radius: 9999px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.70);
+}
+
+/* ── "revealed" state triggered by IntersectionObserver ── */
+.how-tl-item.tl-revealed .how-tl-node-dot {
+  transform: scale(1);
+  opacity: 1;
+}
+.how-tl-item.tl-revealed .how-tl-node-ring {
+  transform: scale(1.18);
+  opacity: 1;
+}
+.how-tl-item.tl-revealed .how-tl-card {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* stagger node vs card slightly */
+.how-tl-item.tl-revealed .how-tl-node-dot   { transition-delay: 0s; }
+.how-tl-item.tl-revealed .how-tl-node-ring  { transition-delay: 0.08s; }
+.how-tl-item.tl-revealed .how-tl-card       { transition-delay: 0.12s; }
+
 @media (max-width: 480px) {
   .nav-logo-text { margin-left: 2px; }
   .hero-cards { display: none; }
   .how-section  { padding: 48px 16px 48px; }
   .how-h2       { font-size: 24px; line-height: 32px; }
   .how-cards-row { display: none !important; }
-  .mob-revo-wrap.how-revo { display: flex; }
+  .how-timeline-wrap { display: flex; }
   .faq-bottom { flex-direction: column; }
 }
 
@@ -2220,28 +2409,73 @@ body {
 
     </div>
 
-    <!-- Mobile stacked card carousel — How It Works -->
-    <div class="mob-revo-wrap how-revo" id="howRevo">
-      <div class="mob-revo-scene" id="howRing">
-        <div class="mob-revo-glow"></div>
-        <div class="mob-revo-card c1">
-          <div class="mob-revo-icon"><svg width="22" height="22" viewBox="0 0 30 30" fill="none"><circle cx="12" cy="12" r="8" stroke="white" stroke-width="2.2"/><path d="M18 18L26 26" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></div>
-          <div class="mob-revo-title">01 · Discover &amp; Match</div>
-          <div class="mob-revo-desc">AI-powered search to find perfect creators or brands — filtered by niche, follower count and real engagement quality.</div>
+    <!-- Mobile scroll-reveal vertical timeline — How It Works -->
+    <div class="how-timeline-wrap" id="howTimeline">
+      <!-- Vertical progress line -->
+      <div class="how-tl-line">
+        <div class="how-tl-line-fill" id="howTlFill"></div>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="how-tl-item" data-step="0">
+        <div class="how-tl-node">
+          <div class="how-tl-node-ring"></div>
+          <div class="how-tl-node-dot">
+            <svg width="14" height="14" viewBox="0 0 30 30" fill="none"><circle cx="12" cy="12" r="8" stroke="white" stroke-width="2.5"/><path d="M18 18L26 26" stroke="white" stroke-width="2.8" stroke-linecap="round"/></svg>
+          </div>
         </div>
-        <div class="mob-revo-card c3">
-          <div class="mob-revo-icon"><svg width="22" height="22" viewBox="0 0 30 30" fill="none"><rect x="3" y="13" width="24" height="14" rx="3" stroke="white" stroke-width="2.2"/><path d="M8 13V10a7 7 0 0114 0v3" stroke="white" stroke-width="2.2"/><circle cx="15" cy="20" r="2.5" fill="white"/></svg></div>
-          <div class="mob-revo-title">02 · Collaborate Securely</div>
-          <div class="mob-revo-desc">Negotiate terms, sign digital contracts and manage deliverables in a real-time dashboard. Full transparency.</div>
-        </div>
-        <div class="mob-revo-card c5">
-          <div class="mob-revo-icon"><svg width="22" height="22" viewBox="0 0 30 30" fill="none"><path d="M4 22L10 14L15 19L22 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 7h4v4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div class="mob-revo-title">03 · Pay &amp; Grow</div>
-          <div class="mob-revo-desc">Funds held in secure escrow, released on approval. Track analytics and build long-term partnerships.</div>
+        <div class="how-tl-card how-tl-c1">
+          <div class="how-tl-card-blob"></div>
+          <div class="how-tl-step-label">Step 01</div>
+          <div class="how-tl-title">Discover &amp; Match</div>
+          <div class="how-tl-body">Use our AI-powered search to instantly find the perfect creators or brands — filtered by niche, follower count, budget, and real engagement quality.</div>
+          <div class="how-tl-tag-row">
+            <span class="how-tl-tag">AI Search</span>
+            <span class="how-tl-tag">Smart Filters</span>
+          </div>
         </div>
       </div>
-      <div class="mob-revo-dots" id="howDots"></div>
-      <div class="mob-revo-hint">← swipe to browse →</div>
+
+      <!-- Step 2 -->
+      <div class="how-tl-item" data-step="1">
+        <div class="how-tl-node">
+          <div class="how-tl-node-ring"></div>
+          <div class="how-tl-node-dot">
+            <svg width="14" height="14" viewBox="0 0 30 30" fill="none"><rect x="3" y="13" width="24" height="14" rx="3" stroke="white" stroke-width="2.5"/><path d="M8 13V10a7 7 0 0114 0v3" stroke="white" stroke-width="2.5"/><circle cx="15" cy="20" r="2.5" fill="white"/></svg>
+          </div>
+        </div>
+        <div class="how-tl-card how-tl-c2">
+          <div class="how-tl-card-blob"></div>
+          <div class="how-tl-step-label">Step 02</div>
+          <div class="how-tl-title">Collaborate Securely</div>
+          <div class="how-tl-body">Negotiate terms, sign legally-vetted digital contracts, and manage every deliverable in a real-time shared dashboard. Full transparency, zero middlemen.</div>
+          <div class="how-tl-tag-row">
+            <span class="how-tl-tag">Digital Contracts</span>
+            <span class="how-tl-tag">Live Dashboard</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="how-tl-item" data-step="2">
+        <div class="how-tl-node">
+          <div class="how-tl-node-ring"></div>
+          <div class="how-tl-node-dot">
+            <svg width="14" height="14" viewBox="0 0 30 30" fill="none"><path d="M4 22L10 14L15 19L22 7" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 7h4v4" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="how-tl-card how-tl-c3">
+          <div class="how-tl-card-blob"></div>
+          <div class="how-tl-step-label">Step 03</div>
+          <div class="how-tl-title">Pay &amp; Grow</div>
+          <div class="how-tl-body">Funds held in secure escrow, released only upon approval. Track performance analytics across platforms and build long-term partnerships that compound over time.</div>
+          <div class="how-tl-tag-row">
+            <span class="how-tl-tag">Escrow</span>
+            <span class="how-tl-tag">Analytics</span>
+          </div>
+        </div>
+      </div>
+
     </div>
 
   </div>
@@ -2547,7 +2781,47 @@ function switchTab(el) {
   else initSpObserver();
 })();
 
-// ── Stacked Card Carousel Engine ───────────────────────────────────────────
+// ── How It Works: Scroll-Reveal Timeline (mobile) ─────────────────
+(function() {
+  function initHowTimeline() {
+    var items = document.querySelectorAll('.how-tl-item');
+    var fill  = document.getElementById('howTlFill');
+    if (!items.length) return;
+
+    // Only active on mobile (<=480px)
+    if (window.innerWidth > 480) return;
+
+    var revealed = 0;
+    var total = items.length;
+
+    function updateLine() {
+      if (!fill) return;
+      // progress = fraction of steps revealed
+      var pct = total > 1 ? (revealed / (total - 1)) * 100 : (revealed > 0 ? 100 : 0);
+      fill.style.height = Math.min(pct, 100) + '%';
+    }
+
+    items.forEach(function(item, idx) {
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting && !item.classList.contains('tl-revealed')) {
+            item.classList.add('tl-revealed');
+            revealed++;
+            updateLine();
+            obs.unobserve(item);
+          }
+        });
+      }, {
+        threshold: 0.30,
+        rootMargin: '0px 0px -40px 0px'
+      });
+      obs.observe(item);
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initHowTimeline);
+  else initHowTimeline();
+})();
 (function() {
   function initRevo(sceneId, dotsId) {
     var scene = document.getElementById(sceneId);
