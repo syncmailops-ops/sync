@@ -1406,14 +1406,60 @@ body {
   .sp-grid    { grid-template-columns: 1fr 1fr; gap: 14px; }
   .sp-h2      { font-size: 26px; line-height: 34px; }
   .sp-sub     { font-size: 15px; }
-}
-@media (max-width: 480px) {
-  .sp-section { padding: 48px 16px 56px; }
-  .sp-h2      { font-size: 22px; line-height: 30px; }
-  .sp-title   { font-size: 15px; }
-  .sp-desc    { font-size: 13px; line-height: 20px; }
-  .sp-grid    { display: none !important; }
-  .mob-revo-wrap.sp-revo { display: flex; }
+}@media (max-width: 480px) {
+
+  /* section spacing */
+  .sp-section {
+    padding: 48px 16px 220px;
+  }
+
+  .sp-h2 {
+    font-size: 22px;
+    line-height: 30px;
+  }
+
+  .sp-title {
+    font-size: 15px;
+  }
+
+  .sp-desc {
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  /* disable the existing mobile carousel */
+  .mob-revo-wrap.sp-revo {
+    display: none;
+  }
+
+  /* show the grid again but stacked */
+  .sp-grid {
+    display: flex !important;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* stacked scroll cards */
+  .sp-card {
+    position: sticky;
+    top: 88px;
+    margin-bottom: 24px;
+    transform: scale(0.97);
+    transition: transform 0.3s ease;
+  }
+
+  .sp-card:nth-child(1) { top: 88px; }
+  .sp-card:nth-child(2) { top: 96px; }
+  .sp-card:nth-child(3) { top: 104px; }
+  .sp-card:nth-child(4) { top: 112px; }
+  .sp-card:nth-child(5) { top: 120px; }
+  .sp-card:nth-child(6) { top: 128px; }
+
+  /* subtle depth effect */
+  .sp-card:hover {
+    transform: scale(1);
+  }
+
 }
 @media (max-width: 360px) { .sp-section { padding: 40px 12px; } }
 
