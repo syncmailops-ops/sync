@@ -1131,13 +1131,52 @@ body {
 .how-tl-item.tl-revealed .how-tl-card       { transition-delay: 0.12s; }
 
 @media (max-width: 480px) {
+
   .nav-logo-text { margin-left: 2px; }
+
   .hero-cards { display: none; }
+
+  /* HERO FIX */
+  .header {
+    min-height: 100dvh;
+    padding: 20px 0 32px;
+  }
+
+  .header-row {
+    height: 100%;
+    justify-content: center;
+  }
+
+  .header-left {
+    width: 100%;
+  }
+
+  .hero-h1 h1 {
+    font-size: 34px;
+    line-height: 42px;
+  }
+
+  .hero-buttons-row {
+    width: 100%;
+  }
+
+  .btn-creator {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* HOW SECTION */
   .how-section  { padding: 48px 16px 48px; }
-  .how-h2       { font-size: 24px; line-height: 32px; }
+
+  .how-h2 { 
+    font-size: 24px; 
+    line-height: 32px; 
+  }
+
   .how-cards-row { display: none !important; }
+
   .how-timeline-wrap { display: flex; }
-  .faq-bottom { flex-direction: column; }
+
 }
 
 /* ─── PLATFORM SUPERPOWERS ─── */
