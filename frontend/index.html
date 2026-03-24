@@ -1665,14 +1665,14 @@ body {
   .nav-logo-img        { width: 52px; height: 52px; }
 
   /* Hero — stack vertically */
-  .header              { padding: 36px 0 52px; min-height: unset; }
+  .header              { padding: 0; min-height: calc(100svh - 60px); justify-content: center; }
+  .header-content-wrap { justify-content: center; }
   .header-content-wrap { height: auto; }
   .header-row          {
     flex-direction: column;
     align-items: stretch;
     padding: 0 20px;
     height: auto;
-    min-height: unset;
     gap: 32px;
   }
   .header-left         { max-width: 100%; width: 100%; text-align: left; align-items: flex-start; display: flex; flex-direction: column; order: 1; }
@@ -1718,9 +1718,10 @@ body {
   .nav-logo-img        { width: 44px; height: 44px; }
   .nav-cta-btn         { padding: 8px 14px; font-size: 13px; height: 36px; }
 
-  /* Hero */
-  .header              { padding: 28px 0 40px; }
-  .header-row          { padding: 0 16px; gap: 28px; }
+  /* Hero — full screen on mobile */
+  .header              { padding: 0; min-height: calc(100svh - 60px); justify-content: center; }
+  .header-content-wrap { justify-content: center; height: 100%; }
+  .header-row          { padding: 32px 16px; gap: 28px; }
   .hero-badge-pill     { margin-bottom: 14px; }
   .hero-h1 h1          { font-size: 30px; line-height: 38px; letter-spacing: -0.8px; }
   .hero-subtitle-wrap  { margin-bottom: 20px; }
@@ -2804,15 +2805,26 @@ function switchTab(el) {
     items.forEach(function(item, idx) {
       var obs = new IntersectionObserver(function(entries) {
         entries.forEach(function(e) {
-          if (e.isIntersecting && !item.classList.contains('tl-revealed')) {
-            item.classList.add('tl-revealed');
-            revealed++;
-            updateLine();
-            obs.unobserve(item);
+          if (e.isIntersecting) {
+            if (!item.classList.contains('tl-revealed')) {
+              item.classList.add('tl-revealed');
+              revealed = Math.max(revealed, idx + 1);
+              updateLine();
+            }
+          } else {
+            if (item.classList.contains('tl-revealed')) {
+              item.classList.remove('tl-revealed');
+              // Recount based on remaining revealed items
+              revealed = 0;
+              items.forEach(function(it, i) {
+                if (it.classList.contains('tl-revealed')) revealed = Math.max(revealed, i + 1);
+              });
+              updateLine();
+            }
           }
         });
       }, {
-        threshold: 0.30,
+        threshold: 0.25,
         rootMargin: '0px 0px -40px 0px'
       });
       obs.observe(item);
