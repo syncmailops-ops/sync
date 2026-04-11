@@ -3569,6 +3569,397 @@ function closeWelcomePopup(onClose) {
 </div><!-- end reg-overlay -->
 
 <!-- ═══════════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════════ -->
+<style>
+/* ── FOOTER ── */
+.sf * { box-sizing: border-box; }
+
+.sf {
+  width: 100%;
+  background: #FFFFFF;
+  border-top: 1px solid #E2E8F0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 32px 0;
+  font-family: 'Manrope', sans-serif;
+}
+
+.sf-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  max-width: 1216px;
+}
+
+/* ── TOP BODY ── */
+.sf-top {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 48px;
+  width: 100%;
+  padding-bottom: 36px;
+}
+
+/* Brand left column */
+.sf-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  width: 320px;
+  flex-shrink: 0;
+}
+
+.sf-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.sf-logo-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sf-logo-name {
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 28px;
+  color: #0F172A;
+  letter-spacing: -0.3px;
+}
+
+.sf-tagline {
+  font-size: 13px;
+  line-height: 20px;
+  color: #64748B;
+  margin: 0;
+  max-width: 300px;
+}
+
+.sf-socials {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.sf-social {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  border-radius: 9999px;
+  color: #64748B;
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s, box-shadow 0.15s;
+  flex-shrink: 0;
+}
+.sf-social:hover {
+  border-color: #94A3B8;
+  color: #0F172A;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+
+/* Nav columns */
+.sf-nav-wrap {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 56px;
+}
+
+.sf-nav-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex-shrink: 0;
+  min-width: 130px;
+}
+
+.sf-col-heading {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 22px;
+  color: #0F172A;
+}
+
+.sf-col-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sf-col-list a {
+  font-size: 13.5px;
+  line-height: 20px;
+  color: #64748B;
+  text-decoration: none;
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+.sf-col-list a:hover { color: #0F172A; }
+
+/* Careers + Hiring badge row */
+.sf-careers-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sf-careers-row a {
+  font-size: 13.5px;
+  line-height: 20px;
+  color: #64748B;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.sf-careers-row a:hover { color: #0F172A; }
+
+.sf-hiring-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  background: #EFF6FF;
+  border: 1px solid #DBEAFE;
+  border-radius: 4px;
+}
+.sf-hiring-badge span {
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 18px;
+  color: #3B82F6;
+  letter-spacing: 0.02em;
+}
+
+/* ── BOTTOM BAR ── */
+.sf-bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-top: 1px solid #E2E8F0;
+  gap: 16px;
+}
+
+.sf-copyright {
+  font-size: 13px;
+  line-height: 20px;
+  color: #64748B;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.sf-bottom-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.sf-bottom-links {
+  display: flex;
+  gap: 20px;
+}
+.sf-bottom-links a {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #64748B;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+.sf-bottom-links a:hover { color: #0F172A; }
+
+.sf-locale-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sf-locale-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border: 1px solid #CBD5E1;
+  border-radius: 4px;
+  background: transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.sf-locale-btn:hover { border-color: #94A3B8; }
+.sf-locale-btn span {
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 18px;
+  color: #0F172A;
+  white-space: nowrap;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .sf-nav-wrap { gap: 32px; }
+  .sf-brand { width: 260px; }
+}
+@media (max-width: 780px) {
+  .sf-top { flex-direction: column; gap: 32px; }
+  .sf-brand { width: 100%; }
+  .sf-nav-wrap { justify-content: flex-start; flex-wrap: wrap; gap: 28px 40px; }
+}
+@media (max-width: 600px) {
+  .sf { padding: 32px 20px 0; }
+  .sf-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .sf-bottom-right { flex-direction: column; align-items: flex-start; gap: 10px; }
+}
+</style>
+
+<footer class="sf" role="contentinfo">
+  <div class="sf-inner">
+
+    <!-- TOP -->
+    <div class="sf-top">
+
+      <!-- Brand -->
+      <div class="sf-brand">
+        <a class="sf-logo" href="/">
+          <div class="sf-logo-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="10" r="2.8" fill="white"/>
+              <circle cx="10"   cy="3.2"  r="1.8" fill="white" opacity="0.9"/>
+              <circle cx="16.8" cy="6.6"  r="1.8" fill="white" opacity="0.9"/>
+              <circle cx="16.8" cy="13.4" r="1.8" fill="white" opacity="0.9"/>
+              <circle cx="10"   cy="16.8" r="1.8" fill="white" opacity="0.9"/>
+              <circle cx="3.2"  cy="13.4" r="1.8" fill="white" opacity="0.9"/>
+              <circle cx="3.2"  cy="6.6"  r="1.8" fill="white" opacity="0.9"/>
+              <line x1="10"   y1="5"    x2="10"   y2="7.2"  stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+              <line x1="15.4" y1="7.6"  x2="12.8" y2="8.7"  stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+              <line x1="15.4" y1="12.4" x2="12.8" y2="11.3" stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+              <line x1="10"   y1="15"   x2="10"   y2="12.8" stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+              <line x1="4.6"  y1="12.4" x2="7.2"  y2="11.3" stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+              <line x1="4.6"  y1="7.6"  x2="7.2"  y2="8.7"  stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+            </svg>
+          </div>
+          <span class="sf-logo-name">SynkSpace</span>
+        </a>
+
+        <p class="sf-tagline">Empowering India's creator economy by building the most trusted bridge between creators, brands, and experiences.</p>
+
+        <div class="sf-socials">
+          <!-- Twitter / X -->
+          <a class="sf-social" href="#" target="_blank" rel="noopener" aria-label="Twitter / X">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M12.18 1.5h2.27L9.37 7.42l5.94 7.58h-4.1l-3.47-4.54-3.97 4.54H1.5l5.37-6.14L1.1 1.5h4.22l3.14 4.16 3.72-4.16zm-.8 12.16h1.26L4.37 2.76H3.01l8.37 10.9z"/>
+            </svg>
+          </a>
+          <!-- Instagram -->
+          <a class="sf-social" href="#" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+              <rect x="2" y="2" width="12" height="12" rx="3.5"/>
+              <circle cx="8" cy="8" r="3"/>
+              <circle cx="11.5" cy="4.5" r="0.8" fill="currentColor" stroke="none"/>
+            </svg>
+          </a>
+          <!-- LinkedIn -->
+          <a class="sf-social" href="#" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+              <rect x="2" y="2" width="12" height="12" rx="2.5"/>
+              <path d="M5.2 7.5v4.5M5.2 5.5V5" stroke-linecap="round"/>
+              <path d="M8 12V9.5a2 2 0 014 0V12M8 7.5V7" stroke-linecap="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Nav -->
+      <div class="sf-nav-wrap">
+
+        <div class="sf-nav-col">
+          <span class="sf-col-heading">Platform</span>
+          <div class="sf-col-list">
+            <a href="#">Browse Creators</a>
+            <a href="#">Brand Campaigns</a>
+            <a href="#">Event Calendar</a>
+            <a href="#">Pricing</a>
+          </div>
+        </div>
+
+        <div class="sf-nav-col">
+          <span class="sf-col-heading">Company</span>
+          <div class="sf-col-list">
+            <a href="#">About Us</a>
+            <div class="sf-careers-row">
+              <a href="#">Careers</a>
+              <div class="sf-hiring-badge"><span>Hiring</span></div>
+            </div>
+            <a href="#">Success Stories</a>
+            <a href="#">Contact</a>
+          </div>
+        </div>
+
+        <div class="sf-nav-col">
+          <span class="sf-col-heading">Resources</span>
+          <div class="sf-col-list">
+            <a href="#">Creator Academy</a>
+            <a href="#">Influencer Calculator</a>
+            <a href="#">Blog</a>
+            <a href="#">Help Center</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- BOTTOM BAR -->
+    <div class="sf-bottom">
+      <span class="sf-copyright">© 2023 Sync India. All rights reserved.</span>
+
+      <div class="sf-bottom-right">
+        <div class="sf-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+
+        <div class="sf-locale-row">
+          <a class="sf-locale-btn" href="#" aria-label="Language">
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+              <circle cx="5.5" cy="5.5" r="4.75" stroke="#0F172A" stroke-width="1.1"/>
+              <ellipse cx="5.5" cy="5.5" rx="1.9" ry="4.75" stroke="#0F172A" stroke-width="1.1"/>
+              <line x1="0.75" y1="5.5" x2="10.25" y2="5.5" stroke="#0F172A" stroke-width="1"/>
+              <line x1="1.3" y1="3.3" x2="9.7" y2="3.3" stroke="#0F172A" stroke-width="0.8"/>
+              <line x1="1.3" y1="7.7" x2="9.7" y2="7.7" stroke="#0F172A" stroke-width="0.8"/>
+            </svg>
+            <span>English (IN)</span>
+          </a>
+          <a class="sf-locale-btn" href="#" aria-label="Currency">
+            <span>INR (₹)</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════════
      SYNKSPACE — CONGRATULATIONS / REFERRAL SCREEN
 ═══════════════════════════════════════════════════════════ -->
 <style>
